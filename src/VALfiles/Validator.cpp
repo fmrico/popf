@@ -70,9 +70,9 @@ using std::make_pair;
 
 namespace VAL {
 
-string getName(plan_step* ps)
+std::string getName(plan_step* ps)
 {
-  string actionName = ps->op_sym->getName();
+  std::string actionName = ps->op_sym->getName();
 
       for(typed_symbol_list<const_symbol>::const_iterator j = ps->params->begin();
       			j != ps->params->end(); ++j)
@@ -97,7 +97,7 @@ struct compareActionEndPoints {
 	};
 };
 
-void changeActionTime(const plan * aPlan, string actionName, double newTime)
+void changeActionTime(const plan * aPlan, std::string actionName, double newTime)
 {
 
   for(pc_list<plan_step*>::const_iterator i = aPlan->begin(); i != aPlan->end(); ++i)
@@ -176,7 +176,7 @@ DerivationRules::DerivationRules(const derivations_list * d,const operator_list 
    	  {
    		if(dynamic_cast<const var_symbol *>(*j))
    		{
-   		  string s = toString(count++);
+   		  std::string s = toString(count++);
    		  (*vst)[s] = const_cast<var_symbol*>(dynamic_cast<const var_symbol *>(*j));
 
    		};
@@ -485,7 +485,7 @@ unsigned int DerivationRules::occurNNF(derivation_rule * drv1,derivation_rule * 
 };
 
 //0 = does not appear, 2 = appears negatively, 1 = appears positively (as an atom within formula)
-unsigned int DerivationRules::occur(string s,const goal * g) const
+unsigned int DerivationRules::occur(std::string s,const goal * g) const
 {
     
 	if(dynamic_cast<const comparison*>(g))
@@ -791,7 +791,7 @@ const goal * DerivationRules::NNF(const goal * gl) const
 	return g;
 };
 
-bool DerivationRules::isDerivedPred(string s) const
+bool DerivationRules::isDerivedPred(std::string s) const
 
 {
 	bool ans = false;
@@ -1131,7 +1131,7 @@ void Validator::displayInitPlanLaTeX(const plan * p) const
 	int countNoTimeStamp = 0;
 
 
-	string act,r;
+	std::string act,r;
 	
 	for(pc_list<plan_step*>::const_iterator i = p->begin(); i != p->end() ; ++i)
 	{
@@ -1188,7 +1188,7 @@ void Validator::displayInitPlan(const plan * p) const
 	vector<plan_step*> vps;
 	int countNoTimeStamp = 0;
 
-	string act,r;
+	std::string act,r;
 
 	for(pc_list<plan_step*>::const_iterator i = p->begin(); i != p->end() ; ++i)
 	{
@@ -1915,23 +1915,23 @@ void Gantt::drawLaTeXGantt(const Plan & p,int noPages,int noPageRows)
 vector<string> Gantt::getSigObjs(const Action * a)
 {
 
-	string par;
+	std::string par;
 
-	vector<string> so;
+	vector<std::string> so;
 	//vector<string>::iterator i;
 	
 	for(var_symbol_list::const_iterator i = a->getAction()->parameters->begin() ; i != a->getAction()->parameters->end(); ++i)
 	{
 		par = a->getBindings().find(*i)->second->getName();
 		//is parameter a sigificant object?
-		vector<string>::iterator i = std::find(sigObjs.begin(),sigObjs.end(),par);
-		if(i != sigObjs.end())
+		vector<std::string>::iterator k = std::find(sigObjs.begin(),sigObjs.end(),par);
+		if(k != sigObjs.end())
 		{
 
 			so.push_back(par);
 
 			//add to list of used sig objs if nec
-			vector<string>::iterator j = std::find(usedSigObjs.begin(),usedSigObjs.end(),par);
+			vector<std::string>::iterator j = std::find(usedSigObjs.begin(),usedSigObjs.end(),par);
 			if(j == usedSigObjs.end()) usedSigObjs.push_back(par);
 		};
 
@@ -1975,7 +1975,7 @@ void Gantt::buildRows(const Plan & p)
 	double largestTime;
 	
 	double start,end;
-	string label;
+	std::string label;
 	vector<string> actSigObjs;
 
 
@@ -2145,7 +2145,7 @@ void Gantt::insertRow(int r1,int r2)
 };
 
 
-string Gantt::getSigObj(int r)
+std::string Gantt::getSigObj(int r)
 {
 	//determine sigificant object for this row
 	map<string,int> countSigObjs;
@@ -2195,7 +2195,7 @@ void Gantt::shuffleRows()
 	
 	if((chartRows.size() < 3) || (usedSigObjs.size() == 0)) return;
 
-	string sigObj1,sigObj2,sigObj3;
+	std::string sigObj1,sigObj2,sigObj3;
 	int rowToTake;
 	bool alltheSameSigObj;
 	
@@ -2249,7 +2249,7 @@ void Gantt::displayKey()
 {
 	int pos = 1;
 	int totalNum = 0;
-	string sigObj,lastSigObj,colour;
+	std::string sigObj,lastSigObj,colour;
 
 	
 	for(map<int, map<int, GanttElement *> >::const_iterator i = chartRows.begin(); i != chartRows.end() ; ++i)
@@ -2299,14 +2299,14 @@ void Gantt::displayKey()
 	
 };
 
-string Gantt::getColour(int row)
+std::string Gantt::getColour(int row)
 {
 
 		
-	string sigObj = getSigObj(row);
+	std::string sigObj = getSigObj(row);
 	if(sigObj == "") return "";
 	
-	string ans = "";
+	std::string ans = "";
 
 	double r = 0,b = 0,g = 0;
 	double cyc = 0;
@@ -2376,7 +2376,7 @@ void Gantt::drawLaTeXGantt(double startTime,double endTime,int startRow,int endR
 {
 	double ff = - 0.038; //fudge factor, qbezier and normal lines are slightly out- LaTeXs fault
 	double y;
-	string colour;
+	std::string colour;
 	
 	
 	*report << "%%---------------------------------------------------------\n";
@@ -2643,9 +2643,9 @@ void PlanRepair::firstPlanAdvice()
     if(ErrorReport && getUnSatConditions().size() != 0) repairPlan();
 };
 
-string getName(const plan_step* ps)
+std::string getName(const plan_step* ps)
 {
-  string actionName = ps->op_sym->getName();
+  std::string actionName = ps->op_sym->getName();
 
       for(typed_symbol_list<const_symbol>::const_iterator j = ps->params->begin();
       			j != ps->params->end(); ++j)
@@ -2690,7 +2690,7 @@ pair<double,double> getSlideLimits(set<double> & actionTimes,double & actionTime
    return slideLimits;
 };
 
-pair<double,double> getSlideLimits(const plan * aPlan, string actionName,double currentTime,double deadLine)
+pair<double,double> getSlideLimits(const plan * aPlan, std::string actionName,double currentTime,double deadLine)
 {
   set<double> actionTimes;
   pair<double,double> slideLimits;
@@ -2767,7 +2767,7 @@ void deleteTestPlan(plan * p)
   delete p;
 };
 
-void changeActionTime(const plan * aPlan, string actionName, double currentTime, double newTime)//,include double current time
+void changeActionTime(const plan * aPlan, std::string actionName, double currentTime, double newTime)//,include double current time
 {
 
   for(pc_list<plan_step*>::const_iterator i = aPlan->begin(); i != aPlan->end(); ++i)
@@ -3125,7 +3125,7 @@ pair<const plan_step *,pair<bool,bool> > PlanRepair::repairPlanOneAction(const p
  const plan_step * nextFlawedAction = 0;
  bool planRepaired = false, goalSatisfied = false;
  bool actionFixed = false;
- string actionName = getName(firstAction);
+ std::string actionName = getName(firstAction);
  double actionTime = firstAction->start_time;
  bool con = ContinueAnyway;
  map<const plan_step *,const plan_step *> planStepMap;
@@ -3332,7 +3332,7 @@ void PlanRepair::repairPlanBeagle()
  if(!latex) cout << "\nRepairing plan...\n";
  const plan * repairingPlan = new plan(*p);
  bool planRepaired = false, goalSatisfied = false;
- string actionName; double actionTime;
+ std::string actionName; double actionTime;
  bool continueRepairingTemp = false, continueRepairing = true;
  Validator * toBeDeletedValidator = 0;
  Validator * continueValidator = 0;

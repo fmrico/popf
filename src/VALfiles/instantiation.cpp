@@ -2165,7 +2165,7 @@ public:
     virtual void visit_problem(VAL::problem * p) {
         p->initial_state->visit(this);
         inpres = false;
-        if (p->the_goal) p->the_goal->visit(this);
+        p->the_goal->visit(this);
         if (p->constraints) p->constraints->visit(this);
     };
 
@@ -2181,7 +2181,7 @@ public:
 void instantiatedOp::createAllLiterals(VAL::problem * p, VAL::TypeChecker * tc)
 {
     literals.clear();
-    assert(!howManyLiteralsOfAnySort());
+    assert(!howManyLiterals());
 
     Collector c((VAL::operator_*)0, 0, literals, pnes, tc);
     p->visit(&c);
@@ -2332,46 +2332,6 @@ instantiatedOp::PNEEffectsIterator instantiatedOp::PNEEffectsEnd()
     return pi;
 };
 
-// New code to give unique identifiers to non-static facts and functions
-
-int instantiatedOp::nonStaticLiteralCount = 0;
-int instantiatedOp::nonStaticPNECount = 0;
-    
-bool instantiatedOp::staticFactsAndLiteralsHaveBeenGivenIDs = false;
-
-void instantiatedOp::assignStateIDsToNonStaticLiteralsAndPNEs()
-{
-    nonStaticLiteralCount = 0;
-    nonStaticPNECount = 0;
-    {
-        
-        LiteralStore::iterator lsItr = instantiatedOp::literalsBegin();
-        const LiteralStore::iterator lsEnd = instantiatedOp::literalsEnd();
-        
-        for (; lsItr != lsEnd; ++lsItr) {
-            if (!EPS((*lsItr)->getHead())->appearsStatic()) {
-                (*lsItr)->setStateID(nonStaticLiteralCount);
-                ++nonStaticLiteralCount;
-            }
-        }
-        
-    }
-    
-    {
-    
-        PNEStore::iterator psItr = instantiatedOp::pnesBegin();
-        const PNEStore::iterator psEnd = instantiatedOp::pnesEnd();
-        
-        for (; psItr != psEnd; ++psItr) {
-            if (!EFT((*psItr)->getHead())->isStatic()) {
-                (*psItr)->setStateID(nonStaticPNECount);
-                ++nonStaticPNECount;
-            }
-        }
-    }
-    
-    staticFactsAndLiteralsHaveBeenGivenIDs = true;
-}
 
 
 };

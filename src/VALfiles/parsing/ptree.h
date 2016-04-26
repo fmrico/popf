@@ -27,8 +27,8 @@
 /*-----------------------------------------------------------------------------
   Class definitions for PDDL2.1 parse trees
 
-  $Date: 2009-02-11 17:20:38 $
-  $Revision: 1.4 $
+  $Date: 2010-06-16 13:48:54 $
+  $Revision: 1.1 $
 
   stephen.cresswell@cis.strath.ac.uk
 
@@ -178,7 +178,7 @@ enum pddl_req_attr { E_EQUALITY              =    1,
 		     E_EXT_PRECS             =   16,
 		     E_UNIV_PRECS            =   32,
 		     E_COND_EFFS             =   64,
-		     E_NFLUENTS               =  128,
+		     E_FLUENTS               =  128,
 		     E_DURATIVE_ACTIONS      =  256,
 		     E_TIME                  =  512,    // Obsolete?
 		     E_DURATION_INEQUALITIES = 1024,
@@ -187,9 +187,7 @@ enum pddl_req_attr { E_EQUALITY              =    1,
 		     E_DERIVED_PREDICATES    = 8192,
 		     E_TIMED_INITIAL_LITERALS= 16384,
 		     E_PREFERENCES           = 32768,
-		     E_CONSTRAINTS           = 65536,
-		     E_OFLUENTS              = 131072,
-		     E_ACTIONCOSTS           = 262144
+		     E_CONSTRAINTS           = 65536
 		     
 // Attributes which are defined as combinations of others 
 // are expanded by parser, and don't need to be included here.
@@ -346,7 +344,7 @@ public :
 		// Create new symbol for name and add to table
 		symbol_class* sym= factory->build(name);
 
-		insert(std::make_pair(name,sym));
+		this->insert(std::make_pair(name,sym));
 		return sym;
 	    }
 	};
@@ -389,7 +387,7 @@ public :
 		log_error( E_WARNING,
 			   "Undeclared symbol: " + name );
 		symbol_class* sym= factory->build(name);
-		insert(std::make_pair(name,sym));
+		this->insert(std::make_pair(name,sym));
 
 		return(sym);
  	    }
@@ -413,7 +411,7 @@ public :
  	    {
 		// add new symbol
 		symbol_class* sym= factory->build(name);
-		insert(std::make_pair(name,sym));
+		this->insert(std::make_pair(name,sym));
 
 		return(sym);
  	    }

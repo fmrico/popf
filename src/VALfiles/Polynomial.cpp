@@ -27,8 +27,8 @@
 /*-----------------------------------------------------------------------------
   VAL - The Automatic Plan Validator for PDDL+
 
-  $Date: 2010-09-03 17:56:03 $
-  $Revision: 1.3 $
+  $Date: 2009-02-05 10:50:21 $
+  $Revision: 1.2 $
 
   Maria Fox, Richard Howey and Derek Long - PDDL+ and VAL
   Stephen Cresswell - PDDL Parser
@@ -1578,6 +1578,7 @@ Intervals NumericalSolution::getIntervals(const Comparison * comp, const State* 
 
 bool Polynomial::checkInvariant(const Comparison * comp, const State* s,CoScalar t,bool rhsIntervalOpen) const
 {
+
    	if(getDegree() == 0)
       	{
               return comp->evaluateAtPoint(s);
@@ -1607,7 +1608,8 @@ bool Polynomial::checkInvariant(const Comparison * comp, const State* s,CoScalar
 
       		if( (degree == 1))
       		{
-      			if( (evaluate(0) > - accuracy) && (evaluate(t) > - accuracy))
+
+      			if( (evaluate(0) >= 0) && (evaluate(t) >= 0))
       			{
       				return true;
       			};

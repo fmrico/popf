@@ -28,8 +28,8 @@
 /*-----------------------------------------------------------------------------
   Member functions for parse tree classes
 
-  $Date: 2009-02-11 17:20:38 $
-  $Revision: 1.4 $
+  $Date: 2010-06-16 13:48:54 $
+  $Revision: 1.1 $
 
   stephen.cresswell@cis.strath.ac.uk
   July 2001.
@@ -807,9 +807,7 @@ string pddl_req_flags_string(pddl_req_flag flags)
     if (flags & E_EXT_PRECS) result += ":existential-preconditions ";
     if (flags & E_UNIV_PRECS) result += ":universal-preconditions ";
     if (flags & E_COND_EFFS) result += ":conditional-effects ";
-    if (flags & E_NFLUENTS) result += ":number-fluents ";
-    if (flags & E_OFLUENTS) result += ":object-fluents ";
-    if (flags & E_ACTIONCOSTS) result += ":action-costs ";
+    if (flags & E_FLUENTS) result += ":fluents ";
     if (flags & E_DURATIVE_ACTIONS) result += ":durative-actions ";
     if (flags & E_DURATION_INEQUALITIES) result += ":duration-inequalities ";
     if (flags & E_CONTINUOUS_EFFECTS) result += ":continuous-effects ";

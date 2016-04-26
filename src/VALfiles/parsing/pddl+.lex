@@ -13,7 +13,7 @@ extern "C" int yywrap();
 %}
 %option case-insensitive
 
-char [a-zA-Z_]
+char [a-zA-Z_ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ]
 digit [0-9]
 int -?{digit}*
 float -?{digit}+(\.{digit}*)?
@@ -38,10 +38,8 @@ at_time "at"{whitespace}{float}
 ":universal-preconditions" {return UNIV_PRECS;}
 ":quantified-preconditions" {return QUANT_PRECS;}
 ":conditional-effects" {return COND_EFFS;}
+":numeric-fluents" {return FLUENTS;}
 ":fluents" {return FLUENTS;}
-":numeric-fluents" {return NUMERICFLUENTS;}
-":object-fluents" {return OBJECTFLUENTS;}
-":action-costs" {return ACTIONCOSTS;}
 ":time" {return TIME;}
 ":preferences" {return PREFERENCES;}
 ":constraints" {return CONSTRAINTS;}
@@ -82,6 +80,7 @@ at_time "at"{whitespace}{float}
 "imply" {return IMPLY;}
 "not" {return NOT;}
 "when" {return WHEN;}
+"whenever" {return WHENEVER;}
 "either" {return EITHER;}
 "problem" {return PROBLEM;}
 ":domain" {return FORDOMAIN;}
@@ -100,7 +99,6 @@ at_time "at"{whitespace}{float}
 "duration" {return DURATION_VAR;}
 "total-time" {return TOTAL_TIME;}
 ^"time" {return TIME;}
-"number" {return NUMBER;}
 "increase"   {return INCREASE;}
 "decrease"   {return DECREASE;}
 "scale-up"   {return SCALE_UP;}
@@ -159,4 +157,11 @@ at_time "at"{whitespace}{float}
 
 %% 
 
+
+extern "C" {
+int yywrap()
+{
+	return 1;
+};
+};
 
