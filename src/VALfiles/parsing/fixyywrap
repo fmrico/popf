@@ -1,0 +1,26 @@
+#!/usr/bin/perl -w
+
+$bindir = shift @ARGV;
+$srcdir = shift @ARGV;
+
+system("sed -i 's/yyerror(char/yyerror(const char/' $bindir/pddl+.cpp");
+
+open IN, "g++ -E $srcdir/fixyywrap.cpp |";
+open OUT, "> $bindir/fixyywrap.h";
+
+while (<IN>) {
+
+	if (m/int yywrap/) {
+		print OUT "int yyFlexLexer::yywrap() { return 1; };\n";
+	}
+
+}
+
+close IN;
+close OUT;
+
+open OUT, ">> $bindir/pddl+.cpp";
+print OUT '#include "fixyywrap.h"';
+print OUT "\n\n";
+close OUT;
+

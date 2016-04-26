@@ -1,0 +1,35 @@
+About
+-----
+
+This directory contains the planner POPF2.  The original incarnation of POPF
+is described in the ICAPS 2010 paper "Forward-Chaining Partial-Order Planning."
+by Amanda Coles, Andrew Coles, Maria Fox and Derek Long.  This version
+extends POPF by introducing any-time search, allowing it to optimise solution
+quality.
+
+Compiling
+---------
+
+POPF2 requires:
+- cmake ( http://www.cmake.org/ )
+- the CBC mixed integer programming solver ( https://projects.coin-or.org/Cbc/ )
+- perl, bison and flex to build the parser
+
+These are packaged with most linux distributions - on Ubuntu/Debian, the
+following should suffice:
+
+sudo apt-get install cmake coinor-libcbc-dev coinor-libclp-dev \
+                     coinor-libcoinutils-dev bison flex
+
+
+After that, run ./build
+
+
+Running
+-------
+
+Run:
+
+./plan <domain> <problem> <solution filename>
+
+As POPF2 is an any-time planer, it will save sequentially numbered plans.
