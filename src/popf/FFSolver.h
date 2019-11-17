@@ -436,9 +436,9 @@ private:
 
     static ExtendedMinimalState * applyActionToState(ActionSegment & theAction, const ExtendedMinimalState & parent);
 
-    static void evaluateStateAndUpdatePlan(auto_ptr<SearchQueueItem> & succ, ExtendedMinimalState & state, ExtendedMinimalState * prevState, set<int> & goals, set<int> & goalFluents, ParentData * const incrementalData, list<ActionSegment> & helpfulActionsExport, const ActionSegment & actID, list<FFEvent> & header);
+    static void evaluateStateAndUpdatePlan(unique_ptr<SearchQueueItem> & succ, ExtendedMinimalState & state, ExtendedMinimalState * prevState, set<int> & goals, set<int> & goalFluents, ParentData * const incrementalData, list<ActionSegment> & helpfulActionsExport, const ActionSegment & actID, list<FFEvent> & header);
 
-//  static void justEvaluateNotReuse(auto_ptr<SearchQueueItem> & succ, RPGHeuristic* rpg, ExtendedMinimalState & state, ExtendedMinimalState * prevState, set<int> & goals, set<int> & goalFluents, list<ActionSegment> & helpfulActionsExport, list<FFEvent> & extraEvents, list<FFEvent> & header, HTrio & bestNodeLimitHeuristic, list<FFEvent> *& bestNodeLimitPlan, bool & bestNodeLimitGoal, bool & stagnant, map<double, list<pair<int,int> > > * justApplied, double tilFrom=0.001);
+//  static void justEvaluateNotReuse(unique_ptr<SearchQueueItem> & succ, RPGHeuristic* rpg, ExtendedMinimalState & state, ExtendedMinimalState * prevState, set<int> & goals, set<int> & goalFluents, list<ActionSegment> & helpfulActionsExport, list<FFEvent> & extraEvents, list<FFEvent> & header, HTrio & bestNodeLimitHeuristic, list<FFEvent> *& bestNodeLimitPlan, bool & bestNodeLimitGoal, bool & stagnant, map<double, list<pair<int,int> > > * justApplied, double tilFrom=0.001);
 
 
 //  static bool checkTSTemporalSoundness(RPGHeuristic* const rpg, ExtendedMinimalState & theState, const int & theAction, const VAL::time_spec & ts, const double & incr, int oldTIL=-1);

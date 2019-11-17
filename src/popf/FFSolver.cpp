@@ -1271,7 +1271,7 @@ void ExtendedMinimalState::deQueueStep(const int & actID, const int & stepID)
     assert(pwItr != pwEnd);
 
 }
-void FF::evaluateStateAndUpdatePlan(auto_ptr<SearchQueueItem> & succ, ExtendedMinimalState & state, ExtendedMinimalState * prevState, set<int> & goals, set<int> & goalFluents, ParentData * const incrementalData, list<ActionSegment> & helpfulActionsExport, const ActionSegment & actID, list<FFEvent> & header)
+void FF::evaluateStateAndUpdatePlan(unique_ptr<SearchQueueItem> & succ, ExtendedMinimalState & state, ExtendedMinimalState * prevState, set<int> & goals, set<int> & goalFluents, ParentData * const incrementalData, list<ActionSegment> & helpfulActionsExport, const ActionSegment & actID, list<FFEvent> & header)
 {
 
     list<ActionSegment> helpfulActions;
@@ -1280,7 +1280,7 @@ void FF::evaluateStateAndUpdatePlan(auto_ptr<SearchQueueItem> & succ, ExtendedMi
     FFEvent extraEvent;
     FFEvent extraEventTwo;
 
-    FFEvent * reusedEndEvent = 0;
+    // FFEvent * reusedEndEvent = nullptr;
 
     bool eventOneDefined = false;
     bool eventTwoDefined = false;
@@ -1340,7 +1340,7 @@ void FF::evaluateStateAndUpdatePlan(auto_ptr<SearchQueueItem> & succ, ExtendedMi
             list<FFEvent>::iterator pwItr = succ->plan.begin();
             for (int sID = 0; sID <= pairWith->stepID; ++sID, ++pwItr) ;
             pwItr->getEffects = true;
-            reusedEndEvent = &(*pwItr);
+            // reusedEndEvent = &(*pwItr);
         }
 
         state.startEventQueue.erase(pairWith);
@@ -3215,7 +3215,7 @@ list<FFEvent> * FF::doBenchmark(bool & reachedGoal, list<FFEvent> * oldSoln, con
             continue;
         }
 
-        auto_ptr<ParentData> pd(LPScheduler::prime(currSQI->plan, currSQI->state()->getInnerState().temporalConstraints,
+        unique_ptr<ParentData> pd(LPScheduler::prime(currSQI->plan, currSQI->state()->getInnerState().temporalConstraints,
                                 currSQI->state()->startEventQueue));
 
         SearchQueueItem * succ = new SearchQueueItem(applyActionToState(actID, *(currSQI->state())), true);
@@ -3278,7 +3278,7 @@ list<FFEvent> * FF::doBenchmark(bool & reachedGoal, list<FFEvent> * oldSoln, con
         FFEvent extraEvent;
         FFEvent extraEventTwo;
 
-        FFEvent * reusedEndEvent = 0;
+        FFEvent * reusedEndEvent = nullptr;
 
         bool eventOneDefined = false;
         bool eventTwoDefined = false;
@@ -3676,7 +3676,7 @@ pair<list<FFEvent>*, TemporalConstraints*> FF::search(bool & reachedGoal)
         searchQueue.push_back(initialSQI, 1);
     }
 
-    auto_ptr<StatesToDelete> statesKept(new StatesToDelete());
+    unique_ptr<StatesToDelete> statesKept(new StatesToDelete());
 
     if (ffDebug) cout << "Initial heuristic = " << bestHeuristic.heuristicValue << "\n";
 
@@ -3690,7 +3690,7 @@ pair<list<FFEvent>*, TemporalConstraints*> FF::search(bool & reachedGoal)
         return pair<list<FFEvent>*, TemporalConstraints*>(new list<FFEvent>(),0);
     }
 
-    auto_ptr<list<FFEvent> > bestPlan(new list<FFEvent>());
+    unique_ptr<list<FFEvent> > bestPlan(new list<FFEvent>());
     {
 
         ExtendedMinimalState * const toHash = new ExtendedMinimalState(initialState);
@@ -3714,7 +3714,7 @@ pair<list<FFEvent>*, TemporalConstraints*> FF::search(bool & reachedGoal)
 
     while (!searchQueue.empty()) {
         if (Globals::globalVerbosity & 2) cout << "\n--\n";
-        auto_ptr<SearchQueueItem> currSQI(searchQueue.pop_front());
+        unique_ptr<SearchQueueItem> currSQI(searchQueue.pop_front());
 
         bool foundBetter = false;
 
@@ -3756,14 +3756,14 @@ pair<list<FFEvent>*, TemporalConstraints*> FF::search(bool & reachedGoal)
         FFheader_upToDate = false;
 
 
-        const auto_ptr<ParentData> incrementalData(LPScheduler::prime(currSQI->plan, currSQI->state()->getInnerState().temporalConstraints,
+        const unique_ptr<ParentData> incrementalData(LPScheduler::prime(currSQI->plan, currSQI->state()->getInnerState().temporalConstraints,
                 currSQI->state()->startEventQueue));
 
 
 
         for (; helpfulActsItr != helpfulActsEnd; ++helpfulActsItr) {
 
-            auto_ptr<SearchQueueItem> succ;
+            unique_ptr<SearchQueueItem> succ;
             bool tsSound = false;
             const int oldTIL = currSQI->state()->getInnerState().nextTIL;
 
@@ -3772,7 +3772,7 @@ pair<list<FFEvent>*, TemporalConstraints*> FF::search(bool & reachedGoal)
                 // TODO: Does this need revisiting?
                 // registerFinished(toSolve->rpg, succ->state, needToFinish);
                 ActionSegment tempSeg(0, VAL::E_AT, oldTIL, RPGHeuristic::emptyIntList);
-                succ = auto_ptr<SearchQueueItem>(new SearchQueueItem(applyActionToState(tempSeg, *(currSQI->state())), true));
+                succ = unique_ptr<SearchQueueItem>(new SearchQueueItem(applyActionToState(tempSeg, *(currSQI->state())), true));
 
                 if (succ->state()) {
                     tsSound = checkTemporalSoundness(*(succ->state()), tempSeg, oldTIL);
@@ -3781,7 +3781,7 @@ pair<list<FFEvent>*, TemporalConstraints*> FF::search(bool & reachedGoal)
                 }
             } else {
                 //registerFinished(*(succ->state), helpfulActsItr->needToFinish);
-                succ = auto_ptr<SearchQueueItem>(new SearchQueueItem(applyActionToState(*helpfulActsItr, *(currSQI->state())), true));
+                succ = unique_ptr<SearchQueueItem>(new SearchQueueItem(applyActionToState(*helpfulActsItr, *(currSQI->state())), true));
                 if (succ->state()) {
                     tsSound = checkTemporalSoundness(*(succ->state()), *helpfulActsItr, oldTIL);
                 } else {
@@ -3792,11 +3792,12 @@ pair<list<FFEvent>*, TemporalConstraints*> FF::search(bool & reachedGoal)
 
 
             if (!tsSound) {
-                if (Globals::globalVerbosity & 1) cout << "t"; cout.flush();
+                if (Globals::globalVerbosity & 1) cout << "t"; 
+                cout.flush();
             } else {
 
 
-                auto_ptr<SearchQueueItem> TILparentAutoDelete(0);
+                unique_ptr<SearchQueueItem> TILparentAutoDelete(nullptr);
                 SearchQueueItem * TILparent = 0;
                 bool TILfailure = false;
                 bool incrementalIsDead = false;
@@ -3849,12 +3850,12 @@ pair<list<FFEvent>*, TemporalConstraints*> FF::search(bool & reachedGoal)
                             }
 
                             TILparent = succ.release();
-                            TILparentAutoDelete = auto_ptr<SearchQueueItem>(TILparent);
+                            TILparentAutoDelete = unique_ptr<SearchQueueItem>(TILparent);
 
 
                             tempSeg = ActionSegment(0, VAL::E_AT, tn, RPGHeuristic::emptyIntList);
 
-                            succ = auto_ptr<SearchQueueItem>(new SearchQueueItem(applyActionToState(tempSeg, *(TILparent->state())), true));
+                            succ = unique_ptr<SearchQueueItem>(new SearchQueueItem(applyActionToState(tempSeg, *(TILparent->state())), true));
 
                             if (!succ->state() || !checkTemporalSoundness(*(succ->state()), tempSeg, tn - 1)) {
                                 succ->heuristicValue.heuristicValue = -1.0;
@@ -3939,7 +3940,8 @@ pair<list<FFEvent>*, TemporalConstraints*> FF::search(bool & reachedGoal)
                                 break;
                             }
                         } else {
-                            if (Globals::globalVerbosity & 1) cout << "."; cout.flush();
+                            if (Globals::globalVerbosity & 1) cout << "."; 
+                            cout.flush();
                             searchQueue.push_back(succ.release(), 1);
                         }
                     } else {
@@ -3955,7 +3957,8 @@ pair<list<FFEvent>*, TemporalConstraints*> FF::search(bool & reachedGoal)
 #endif
                     }
                 } else {
-                    if (Globals::globalVerbosity & 1) cout << "p"; cout.flush();
+                    if (Globals::globalVerbosity & 1) cout << "p"; 
+                    cout.flush();
                 }
             }
         }
@@ -3974,7 +3977,7 @@ pair<list<FFEvent>*, TemporalConstraints*> FF::search(bool & reachedGoal)
 
     WAStar = true;
     visitedStates.clear();
-    statesKept = auto_ptr<StatesToDelete>(new StatesToDelete());
+    statesKept = unique_ptr<StatesToDelete>(new StatesToDelete());
 
     {
 
@@ -4004,7 +4007,7 @@ pair<list<FFEvent>*, TemporalConstraints*> FF::search(bool & reachedGoal)
 
     while (!searchQueue.empty()) {
 
-        auto_ptr<SearchQueueItem> currSQI(searchQueue.pop_front());
+        unique_ptr<SearchQueueItem> currSQI(searchQueue.pop_front());
 
         if (Globals::globalVerbosity & 2) {
             cout << "\n--\n";
@@ -4058,11 +4061,11 @@ pair<list<FFEvent>*, TemporalConstraints*> FF::search(bool & reachedGoal)
         list<ActionSegment >::iterator helpfulActsItr = applicableActions.begin();
         const list<ActionSegment >::iterator helpfulActsEnd = applicableActions.end();
 
-        const auto_ptr<ParentData> incrementalData(LPScheduler::prime(currSQI->plan, currSQI->state()->getInnerState().temporalConstraints,
+        const unique_ptr<ParentData> incrementalData(LPScheduler::prime(currSQI->plan, currSQI->state()->getInnerState().temporalConstraints,
                 currSQI->state()->startEventQueue));
 
         for (; helpfulActsItr != helpfulActsEnd; ++helpfulActsItr) {
-            auto_ptr<SearchQueueItem> succ;
+            unique_ptr<SearchQueueItem> succ;
 
             bool tsSound = false;
             const int oldTIL = currSQI->state()->getInnerState().nextTIL;
@@ -4072,7 +4075,7 @@ pair<list<FFEvent>*, TemporalConstraints*> FF::search(bool & reachedGoal)
             if (helpfulActsItr->second == VAL::E_AT) {
 
                 ActionSegment tempSeg(0, VAL::E_AT, oldTIL, RPGHeuristic::emptyIntList);
-                succ = auto_ptr<SearchQueueItem>(new SearchQueueItem(applyActionToState(tempSeg, *(currSQI->state())), true));
+                succ = unique_ptr<SearchQueueItem>(new SearchQueueItem(applyActionToState(tempSeg, *(currSQI->state())), true));
 
                 if (!succ->state()) {
                     tsSound = false;
@@ -4082,7 +4085,7 @@ pair<list<FFEvent>*, TemporalConstraints*> FF::search(bool & reachedGoal)
             } else {
 
                 //registerFinished(*(succ->state), helpfulActsItr->needToFinish);
-                succ = auto_ptr<SearchQueueItem>(new SearchQueueItem(applyActionToState(*helpfulActsItr, *(currSQI->state())), true));
+                succ = unique_ptr<SearchQueueItem>(new SearchQueueItem(applyActionToState(*helpfulActsItr, *(currSQI->state())), true));
 
                 if (!succ->state()) {
                     tsSound = false;
@@ -4118,7 +4121,7 @@ pair<list<FFEvent>*, TemporalConstraints*> FF::search(bool & reachedGoal)
                     printState(*(succ->state()));
                 }
 
-                auto_ptr<SearchQueueItem> TILparentAutoDelete(0);
+                unique_ptr<SearchQueueItem> TILparentAutoDelete(nullptr);
                 SearchQueueItem * TILparent = 0;
                 bool TILfailure = false;
                 bool incrementalIsDead = false;
@@ -4165,10 +4168,10 @@ pair<list<FFEvent>*, TemporalConstraints*> FF::search(bool & reachedGoal)
                             }
 
                             TILparent = succ.release();
-                            TILparentAutoDelete = auto_ptr<SearchQueueItem>(TILparent);
+                            TILparentAutoDelete = unique_ptr<SearchQueueItem>(TILparent);
 
                             tempSeg = ActionSegment(0, VAL::E_AT, tn, RPGHeuristic::emptyIntList);
-                            succ = auto_ptr<SearchQueueItem>(new SearchQueueItem(applyActionToState(tempSeg, *(TILparent->state())), true));
+                            succ = unique_ptr<SearchQueueItem>(new SearchQueueItem(applyActionToState(tempSeg, *(TILparent->state())), true));
                             if (!succ->state() || !checkTemporalSoundness(*(succ->state()), tempSeg, tn - 1)) {
                                 succ->heuristicValue.heuristicValue = -1.0;
                                 TILfailure = true;
@@ -4488,7 +4491,7 @@ list<FFEvent> * FF::reprocessPlan(list<FFEvent> * oldSoln, TemporalConstraints *
         calculateHeuristicAndSchedule(initialState, 0, goals, numericGoals, (ParentData*) 0, currSQI->helpfulActions, currSQI->plan, tEvent, -1);        
     }
 
-    auto_ptr<StatesToDelete> statesKept(new StatesToDelete());
+    unique_ptr<StatesToDelete> statesKept(new StatesToDelete());
 
     list<FFEvent*>::const_iterator oldSolnItr = sortedSoln.begin();
     const list<FFEvent*>::const_iterator oldSolnEnd = sortedSoln.end();
@@ -4508,11 +4511,11 @@ list<FFEvent> * FF::reprocessPlan(list<FFEvent> * oldSoln, TemporalConstraints *
             scheduleToMetric = true;
         }
         
-        const auto_ptr<ParentData> incrementalData(LPScheduler::prime(currSQI->plan, currSQI->state()->getInnerState().temporalConstraints,
+        const unique_ptr<ParentData> incrementalData(LPScheduler::prime(currSQI->plan, currSQI->state()->getInnerState().temporalConstraints,
                 currSQI->state()->startEventQueue));
 
                 
-        auto_ptr<SearchQueueItem> succ = auto_ptr<SearchQueueItem>(new SearchQueueItem(applyActionToState(nextSeg, *(currSQI->state())), true));
+        unique_ptr<SearchQueueItem> succ = unique_ptr<SearchQueueItem>(new SearchQueueItem(applyActionToState(nextSeg, *(currSQI->state())), true));
         
         evaluateStateAndUpdatePlan(succ,  *(succ->state()), currSQI->state(), goals, numericGoals, incrementalData.get(), succ->helpfulActions, nextSeg, currSQI->plan);
 

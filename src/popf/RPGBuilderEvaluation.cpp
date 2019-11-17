@@ -2856,7 +2856,7 @@ int RPGHeuristic::getRelaxedPlan(const MinimalState & theState, const vector<dou
 
     //rpprintState(theState);
 
-    auto_ptr<Private::BuildingPayload> payload(d->spawnNewPayload(theState, minTimestamps, helpfulActions));
+    unique_ptr<Private::BuildingPayload> payload(d->spawnNewPayload(theState, minTimestamps, helpfulActions));
 
     d->giveUsTheEffectsOfExecutingActions(payload.get());
 
