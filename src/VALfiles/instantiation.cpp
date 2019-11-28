@@ -1744,7 +1744,7 @@ void instantiatedOp::instantiate(const VAL::operator_ * op, const VAL::problem *
         }
     }
 
-    auto_ptr<PDCIterator> options(pdc.getIterator());
+    unique_ptr<PDCIterator> options(pdc.getIterator());
 
     while (options->isValid()) {
         for (int x = 0; x < opParamCount; ++x) {
