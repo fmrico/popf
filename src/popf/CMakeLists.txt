@@ -33,19 +33,20 @@ set(popf_build_srcs
     minimalstate.cpp
     temporalconstraints.cpp
     numericanalysis.cpp
-    solver.cpp)
+    solver.cpp
+    solver-clp.cpp)
 
 add_library(popfCommon STATIC ${popf_build_srcs})
 target_link_libraries(popfCommon ParsePDDL Inst)
     install(TARGETS popfCommon
       ARCHIVE DESTINATION lib
       LIBRARY DESTINATION lib
-      RUNTIME DESTINATION bin
+      RUNTIME DESTINATION lib/${PROJECT_NAME}
     )
 
 #if((NOT DISABLE_CLP) AND CLP_INCLUDES)
 if (CLP_INCLUDES AND CBC_INCLUDES)
-    ADD_EXECUTABLE(popf popfMain.cpp solver-clp.cpp)
+    ADD_EXECUTABLE(popf popfMain.cpp)
     
     target_link_libraries(popf
         popfCommon
@@ -54,7 +55,7 @@ if (CLP_INCLUDES AND CBC_INCLUDES)
     install(TARGETS popf
       ARCHIVE DESTINATION lib
       LIBRARY DESTINATION lib
-      RUNTIME DESTINATION bin
+      RUNTIME DESTINATION lib/${PROJECT_NAME}
     )
                 
 #endif((NOT DISABLE_CLP) AND CLP_INCLUDES)
