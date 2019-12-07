@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<package>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
   <name>popf</name>
   <version>0.0.1</version>
   <description>The POPF package</description>
@@ -31,17 +32,11 @@
   <!--   <run_depend>message_runtime</run_depend> -->
   <!-- Use test_depend for packages you need only for testing: -->
   <!--   <test_depend>gtest</test_depend> -->
-  <buildtool_depend>catkin</buildtool_depend>
-  <build_depend>roscpp</build_depend>
-  <build_depend>flex</build_depend>
-  <build_depend>bison</build_depend>
-  <build_depend>coinor-solvers</build_depend>
-
-  <run_depend>roscpp</run_depend>
-  <run_depend>flex</run_depend>
-  <run_depend>bison</run_depend>
-  <run_depend>coinor-solvers</run_depend>
-
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <depend>rclcpp</depend>
+  <depend>flex</depend>
+  <depend>bison</depend>
+  <depend>coinor-solvers</depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
@@ -49,7 +44,7 @@
     <!-- <metapackage/> -->
 
     <!-- Other tools can request additional information be placed here -->
-    <build_type>cmake</build_type>
+    <build_type>ament_cmake</build_type>
 
   </export>
 </package>

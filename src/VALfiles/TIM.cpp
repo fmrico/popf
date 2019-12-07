@@ -28,6 +28,7 @@
 #include "TimSupport.h"
 #include <cstdio>
 #include <iostream>
+#include <sstream>
 #include <fstream>
 #include "ptree.h"
 #include "FlexLexer.h"
@@ -68,7 +69,161 @@ namespace TIM {
 TIMAnalyser * TA;
 
 
+void performTIMAnalysisFromString(const std::string& domain, const std::string& problem)
+{
+    current_analysis = new analysis;
+    IDopTabFactory * fac = new IDopTabFactory;
+    current_analysis->setFactory(fac);
+    current_analysis->pred_tab.replaceFactory<holding_pred_symbol>();
+    current_analysis->func_tab.replaceFactory<extended_func_symbol>();
+    current_analysis->const_tab.replaceFactory<TIMobjectSymbol>();
+    current_analysis->op_tab.replaceFactory<TIMactionSymbol>();
+    current_analysis->setFactory(new TIMfactory());
+    unique_ptr<EPSBuilder> eps(new specEPSBuilder<TIMpredSymbol>());
+    Associater::buildEPS = std::move(eps);
+    
+    std::istringstream* current_in_stream;
+    yydebug=0; // Set to 1 to output yacc trace 
 
+    yfl= new yyFlexLexer;
+
+    current_in_stream = new std::istringstream(domain);
+    if (current_in_stream->bad())
+	{
+		cerr << "Failed to open domain file " << domain << "\n";
+        line_no= 0;
+        return;
+    } else {
+        line_no= 1;
+
+		yfl->switch_streams(current_in_stream,&cout);
+		yyparse();
+    }
+    delete current_in_stream;
+    
+    current_in_stream = new std::istringstream(problem);
+    if (current_in_stream->bad())
+	{
+		cerr << "Failed to open problem file " << domain << "\n";
+        line_no= 0;
+        return;
+    } else {
+        line_no= 1;
+
+		yfl->switch_streams(current_in_stream,&cout);
+		yyparse();
+    }
+    delete current_in_stream;
+    
+    // Output the errors from all input files
+    if(current_analysis->error_list.errors) {
+	cerr << "Critical Errors Encountered in Domain/Problem File\n";
+	cerr << "--------------------------------------------------\n\n";
+        cerr << "Due to critical errors in the supplied domain/problem file, the planner\n";
+	cerr << "has to terminate.  The errors encountered are as follows:\n";
+    	current_analysis->error_list.report();
+	exit(0);
+    } else if (current_analysis->error_list.warnings) {
+        cout << "Warnings encountered when parsing Domain/Problem File\n";
+	cerr << "-----------------------------------------------------\n\n";
+        cerr << "The supplied domain/problem file appear to violate part of the PDDL\n";
+        cerr << "language specification.  Specifically:\n";
+    	current_analysis->error_list.report();
+	cerr << "\nThe planner will continue, but you may wish to fix your files accordingly\n";
+    }
+
+    delete yfl;
+
+    #ifdef STATICHACK
+    
+    cout << "Domain: '" << current_analysis->the_domain->name << "'\n";
+    if (current_analysis->the_domain->name.find("storage") == 0) {
+        cout << "HACK: Recognised the storage domain, overriding recognised static fact data\n";
+        overruleStaticInformation = true;
+        set<string> s;
+        s.insert("connected");
+        s.insert("compatible");
+        setStatics(s);
+    }
+    
+    #endif
+    
+    
+    DurativeActionPredicateBuilder dapb;
+    current_analysis->the_domain->visit(&dapb);
+
+	theTC = new TypeChecker(current_analysis);
+    
+    bool domainOkay = false;
+    
+    try {
+        domainOkay = theTC->typecheckDomain();
+    }
+    catch (std::exception e) {
+    }
+    
+    if (!domainOkay) {
+		cerr << "Type Errors Encountered in Domain File\n";
+		cerr << "--------------------------------------\n\n";
+		cerr << "Due to type errors in the supplied domain file, the planner\n";
+		cerr << "has to terminate.  The log of type checking is as follows:\n\n";
+		Verbose = true;
+        try {
+            theTC->typecheckDomain();
+        }
+        catch (std::exception e) {
+        }        
+		exit(1);
+	}
+	
+    bool problemOkay = false;
+	
+    try {
+        problemOkay = theTC->typecheckProblem();
+    }
+    catch (std::exception e) {
+    }
+            
+	if (!problemOkay) {
+		cerr << "Type Errors Encountered in Problem File\n";
+		cerr << "---------------------------------------\n\n";
+		cerr << "Due to type errors in the supplied problem file, the planner\n";
+		cerr << "has to terminate.  The log of type checking is as follows:\n\n";
+		Verbose = true;
+        try {
+            theTC->typecheckProblem();
+        }
+        catch (std::exception e) {
+        }
+                    
+		exit(1);
+	}
+    TypePredSubstituter a;
+    current_analysis->the_problem->visit(&a);
+   	current_analysis->the_domain->visit(&a); 
+
+   	Analyser aa(dapb.getIgnores());
+   	current_analysis->the_problem->visit(&aa);
+   	current_analysis->the_domain->visit(&aa);
+
+//    current_analysis->the_domain->predicates->visit(&aa);
+
+	if(FAverbose && current_analysis->the_domain->functions)
+		current_analysis->the_domain->functions->visit(&aa);
+    TA = new TIMAnalyser(*theTC,current_analysis);
+    current_analysis->the_domain->visit(TA);
+    current_analysis->the_problem->visit(TA);
+    for_each(current_analysis->the_domain->ops->begin(),
+    			current_analysis->the_domain->ops->end(),completeMutexes);
+	TA->checkSV();
+    dapb.reverse();
+    current_analysis->the_domain->visit(&dapb);
+    for(vector<durative_action*>::iterator i = aa.getFixedDAs().begin();
+    		i != aa.getFixedDAs().end();++i)
+    {
+    	(static_cast<TIMactionSymbol*>((*i)->name))->assertFixedDuration();
+    };
+}
 void performTIMAnalysis(char * argv[])
 {
     current_analysis = new analysis;

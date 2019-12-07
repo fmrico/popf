@@ -38,6 +38,7 @@ namespace TIM {
 extern TIMAnalyser * TA;
 
 void performTIMAnalysis(char * argv[]);
+void performTIMAnalysisFromString(const std::string& domain, const std::string& problem);
 
 };
 
