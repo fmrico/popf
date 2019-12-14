@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.5)
 project (popf) 
 
 set(CMAKE_CXX_STANDARD 17)
-#set(CMAKE_BUILD_TYPE DEBUG)
 
 find_package(ament_cmake REQUIRED)
 set(dependencies
@@ -20,7 +19,6 @@ find_package(Clp)
 find_package(CoinUtils)
 find_package(Cbc)
 find_package(Cgl)
-find_package(OSI)
 
 set(val_SOURCE_DIR src/VALfiles)
 set(popf_SOURCE_DIR src/popf)
@@ -65,7 +63,7 @@ install(TARGETS popfCommon ParsePDDL Inst
 ADD_EXECUTABLE(popf ${popf_SOURCE_DIR}/popfMain.cpp)
 target_link_libraries(popf
   popfCommon
-  ${CBC_SOLVER_LIBRARY} ${CBC_LIBRARY} ${CGL_LIBRARIES} ${OSICLP_LIBRARIES} ${OSI_LIBRARIES} ${CLP_LIBRARIES}  ${COINUTILS_LIBRARIES}
+  ${CBC_SOLVER_LIBRARY} ${CBC_LIBRARY} ${CGL_LIBRARIES} ${CLP_LIBRARIES}  ${COINUTILS_LIBRARIES}
 )
 install(TARGETS popf
   ARCHIVE DESTINATION lib

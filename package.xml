@@ -8,13 +8,15 @@
   <!-- One maintainer tag required, multiple allowed, one person per tag --> 
   <!-- Example:  -->
   <!-- <maintainer email="jane.doe@example.com">Jane Doe</maintainer> -->
-  <maintainer email="marc@hanheide.net">Marc Hanheide</maintainer>
+  <maintainer email="fmrico@gmail.com">Francisco Martin</maintainer>
 
 
   <!-- One license tag required, multiple allowed, one license per tag -->
   <!-- Commonly used license strings: -->
   <!--   BSD, MIT, Boost Software License, GPLv2, GPLv3, LGPLv2.1, LGPLv3 -->
   <license>GPLv2</license>
+  
+  <author>Marc Hanheide</author>
 
   <!-- Author tags are optional, mutiple are allowed, one per tag -->
   <!-- Authors do not have to be maintianers, but could be -->
@@ -36,7 +38,6 @@
   <depend>rclcpp</depend>
   <depend>flex</depend>
   <depend>bison</depend>
-  <depend>coinor-solvers</depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
