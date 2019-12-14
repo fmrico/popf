@@ -27,8 +27,8 @@ include_directories(
   ${val_SOURCE_DIR} 
   ${parsePDDL_SOURCE_DIR}
   ${val_BINARY_DIR} 
-  ${CLP_INCLUDES}/coin 
-  ${CBC_INCLUDES}/coin 
+  ${CLP_INCLUDES}/coin
+  ${CBC_INCLUDES}/coin  
   ${CPLEX_INCLUDES} 
   ${CONCERT_INCLUDES}
 )
@@ -94,6 +94,7 @@ set(libInst_SRCS
 )
 
 add_library(Inst SHARED ${libInst_SRCS})
+target_link_libraries(Inst ParsePDDL)
 
 set(validate_SRCS
      ${val_SOURCE_DIR}/Action.cpp 
@@ -119,7 +120,7 @@ set(validate_SRCS
 add_executable(validate ${validate_SRCS})
 
 target_link_libraries(validate
-        ParsePDDL
+  ParsePDDL
 )
 
 set(parser_SRCS
@@ -161,10 +162,6 @@ set(popf_build_srcs
 add_library(popfCommon SHARED ${popf_build_srcs})
 target_link_libraries(popfCommon ParsePDDL Inst)
 
-
-
-
-
 install(TARGETS popfCommon ParsePDDL Inst
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
@@ -174,7 +171,7 @@ install(TARGETS popfCommon ParsePDDL Inst
 ADD_EXECUTABLE(popf ${popf_SOURCE_DIR}/popfMain.cpp)
 target_link_libraries(popf
   popfCommon
-  ${CBC_SOLVER_LIBRARY} ${CBC_LIBRARY} ${CGL_LIBRARIES} ${CLP_LIBRARIES}  ${COINUTILS_LIBRARIES}
+  ${CBC_LIBRARY} ${CGL_LIBRARIES} ${CLP_LIBRARIES}  ${COINUTILS_LIBRARIES}
 )
 install(TARGETS popf
   ARCHIVE DESTINATION lib
@@ -187,6 +184,6 @@ install(FILES src/popf/Popf.hpp
 )
 
 ament_export_include_directories(include)
-ament_export_libraries(popfCommon ParsePDDL Inst ${CBC_SOLVER_LIBRARY} ${CBC_LIBRARY} ${CGL_LIBRARIES} ${OSICLP_LIBRARIES} ${OSI_LIBRARIES} ${CLP_LIBRARIES}  ${COINUTILS_LIBRARIES})
+ament_export_libraries(popfCommon ParsePDDL Inst ${CBC_LIBRARY} ${CGL_LIBRARIES} ${OSICLP_LIBRARIES} ${OSI_LIBRARIES} ${CLP_LIBRARIES}  ${COINUTILS_LIBRARIES})
 ament_export_dependencies(${dependencies})
 ament_package()
