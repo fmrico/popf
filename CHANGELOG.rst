@@ -12,8 +12,8 @@ Changelog for package popf
 * initial commit
 * Contributors: Marc Hanheide
 
-Forthcoming
------------
+0.0.3 (2019-12-14)
+------------------
 
 0.0.2 (2019-12-07)
 ------------------
