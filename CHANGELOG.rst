@@ -12,7 +12,11 @@ Changelog for package popf
 * initial commit
 * Contributors: Marc Hanheide
 
+Forthcoming
+-----------
+
 0.0.2 (2019-12-07)
 ------------------
 * Update to ROS2
 * Use as library
+* Contributors: Marc Hanheide, Francisco Martin
