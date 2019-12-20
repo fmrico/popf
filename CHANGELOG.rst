@@ -2,6 +2,9 @@
 Changelog for package popf
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 0.0.4 (2019-12-20)
 ------------------
 * Fixing package dependencies
