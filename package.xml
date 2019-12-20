@@ -38,7 +38,10 @@
   <depend>rclcpp</depend>
   <depend>flex</depend>
   <depend>bison</depend>
-
+  <depend>coinor-libcgl-dev</depend>
+  <depend>coinor-libclp-dev</depend>
+  <depend>coinor-libcbc-dev</depend>
+  <depend>coinor-libcoinutils-dev</depend>
   <!-- The export tag contains other, unspecified, tags -->
   <export>
     <!-- You can specify that this package is a metapackage here: -->
