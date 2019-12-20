@@ -2,6 +2,9 @@
 Changelog for package popf
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 0.0.1 (2016-04-26)
 ------------------
 * Update package.xml
@@ -19,4 +22,12 @@ Changelog for package popf
 ------------------
 * Update to ROS2
 * Use as library
-* Contributors: Marc Hanheide, Francisco Martin
+
+0.0.3 (2019-12-20)
+------------------
+* Fix packaging errors
+
+0.0.5 (2019-12-20)
+------------------
+* Fixing package dependencies
+  Signed-off-by: Francisco Martin Rico <fmrico@gmail.com>
