@@ -16,3 +16,7 @@ Changelog for package popf
 ------------------
 * Update to ROS2
 * Use as library
+
+0.0.3 (2019-12-20)
+------------------
+* Fix packaging errors
