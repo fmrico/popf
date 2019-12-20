@@ -2,7 +2,7 @@
 Changelog for package popf
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-0.0.9 (2019-12-20)
+0.0.10 (2019-12-20)
 ------------------
 * Added dependencies to package.xml
 
