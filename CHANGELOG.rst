@@ -2,8 +2,8 @@
 Changelog for package popf
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.0.4 (2019-12-20)
+------------------
 * Fixing package dependencies
   Signed-off-by: Francisco Martin Rico <fmrico@gmail.com>
 * One CMakeLists.txt
