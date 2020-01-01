@@ -36,4 +36,3 @@ Changelog for package popf
 * popf 1 included and made work
 * initial commit
 * Contributors: Marc Hanheide
-
