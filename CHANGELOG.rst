@@ -2,8 +2,8 @@
 Changelog for package popf
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.0.12 (2020-07-18)
+-------------------
 * Foxy initial version
 * Fix conflicts in changelog
 * Functional version
