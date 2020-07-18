@@ -27,8 +27,6 @@
 
 #ifndef SOLVERCLP_H
 #define SOLVERCLP_H
-	
-#pragma GCC diagnostic ignored "-Wregister"
 
 #include "solver.h"
 

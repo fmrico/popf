@@ -31,6 +31,7 @@
 #include "numericanalysis.h"
 #include "lpscheduler.h"
 
+#include <unistd.h> //  This works  DRJ
 #include <float.h>
 
 #include <sys/times.h>
@@ -1015,10 +1016,10 @@ FF::HTrio FF::calculateHeuristicAndSchedule(ExtendedMinimalState & theState, Ext
     LPScheduler tryToSchedule(theState.getInnerState(), header, now, stepID, theState.startEventQueue, incrementalData, theState.entriesForAction, (prevState ? &prevState->getInnerState().secondMin : 0), (prevState ? &prevState->getInnerState().secondMax : 0), &(theState.tilComesBefore), scheduleToMetric);
 
     if (scheduleToMetric) {
-        HTrio toReturn(0, 0.0, 0.0, theState.getInnerState().planLength - theState.getInnerState().actionsExecuting, "Evaluated Successfully");        
-        return toReturn;        
+        HTrio toReturn(0, 0.0, 0.0, theState.getInnerState().planLength - theState.getInnerState().actionsExecuting, "Evaluated Successfully");
+        return toReturn;
     }
-    
+
     if (!tryToSchedule.isSolved()) return HTrio(-1.0, DBL_MAX, DBL_MAX, INT_MAX, "LP deemed action choice invalid");
 
     tryToSchedule.updateStateFluents(theState.getEditableInnerState().secondMin, theState.getEditableInnerState().secondMax);
@@ -1280,7 +1281,7 @@ void FF::evaluateStateAndUpdatePlan(unique_ptr<SearchQueueItem> & succ, Extended
     FFEvent extraEvent;
     FFEvent extraEventTwo;
 
-    // FFEvent * reusedEndEvent = nullptr;
+    FFEvent * reusedEndEvent = 0;
 
     bool eventOneDefined = false;
     bool eventTwoDefined = false;
@@ -1340,7 +1341,7 @@ void FF::evaluateStateAndUpdatePlan(unique_ptr<SearchQueueItem> & succ, Extended
             list<FFEvent>::iterator pwItr = succ->plan.begin();
             for (int sID = 0; sID <= pairWith->stepID; ++sID, ++pwItr) ;
             pwItr->getEffects = true;
-            // reusedEndEvent = &(*pwItr);
+            reusedEndEvent = &(*pwItr);
         }
 
         state.startEventQueue.erase(pairWith);
@@ -2611,34 +2612,34 @@ void reorderNonDeletorsFirst(list<ActionSegment > & applicableActions)
     applicableActions.clear();
 
     list<set<int> > preconditionFacts;
-    
+
     {
-        
+
         list<ActionSegment >::iterator itr = tmp.begin();
         const list<ActionSegment >::iterator itrEnd = tmp.end();
-     
+
         for (; itr != itrEnd; ++itr) {
             preconditionFacts.push_back(set<int>());
-            
+
             if (itr->second == VAL::E_AT) continue;
-            
+
             set<int> & toFill = preconditionFacts.back();
-            
+
             const list<Literal*> & pres = (itr->second == VAL::E_AT_START
                                            ? RPGBuilder::getProcessedStartPropositionalPreconditions()[itr->first->getID()]
                                            : RPGBuilder::getEndPropositionalPreconditions()[itr->first->getID()]);
-                                           
+
             list<Literal*>::const_iterator pItr = pres.begin();
             const list<Literal*>::const_iterator pEnd = pres.end();
-            
+
             for (; pItr != pEnd; ++pItr) {
                 toFill.insert((*pItr)->getID());
             }
         }
     }
-    
+
     list<int> penalties;
-    
+
     list<set<int> >::const_iterator ownPFItr = preconditionFacts.begin();
     list<ActionSegment >::iterator itr = tmp.begin();
     const list<ActionSegment >::iterator itrEnd = tmp.end();
@@ -2647,46 +2648,46 @@ void reorderNonDeletorsFirst(list<ActionSegment > & applicableActions)
         int penaltyScore = 0;
         if (itr->second != VAL::E_AT) {
             set<int> toFill;
-            
+
             const list<Literal*> & effs = (itr->second == VAL::E_AT_START
                                             ? RPGBuilder::getStartPropositionDeletes()[itr->first->getID()]
                                             : RPGBuilder::getEndPropositionDeletes()[itr->first->getID()]);
-                                            
+
             list<Literal*>::const_iterator eItr = effs.begin();
             const list<Literal*>::const_iterator eEnd = effs.end();
 
             for (; eItr != eEnd; ++eItr) {
                 toFill.insert((*eItr)->getID());
             }
-            
+
             list<set<int> >::const_iterator pfItr = preconditionFacts.begin();
             const list<set<int> >::const_iterator pfEnd = preconditionFacts.end();
-            
+
             for (; pfItr != pfEnd; ++pfItr) {
                 if (pfItr == ownPFItr) {
                     continue;
                 }
                 set<int> overlap;
-                
+
                 std::set_intersection(pfItr->begin(), pfItr->end(), toFill.begin(), toFill.end(),
                                       insert_iterator<set<int> >(overlap, overlap.begin()));
-                                      
+
                 if (!overlap.empty()) {
                     ++penaltyScore;
                 }
             }
         }
-        
+
         list<int>::iterator penItr = penalties.begin();
         list<ActionSegment>::iterator actItr = applicableActions.begin();
-        
+
         for (; actItr != applicableActions.end() && penaltyScore >= *penItr; ++actItr, ++penItr) ;
-        
+
         penalties.insert(penItr, penaltyScore);
         applicableActions.insert(actItr, *itr);
-        
+
     }
-    
+
     if (false) {
         cout << "After, ordered:\n";
         list<ActionSegment>::iterator postItr = applicableActions.begin();
@@ -3278,7 +3279,7 @@ list<FFEvent> * FF::doBenchmark(bool & reachedGoal, list<FFEvent> * oldSoln, con
         FFEvent extraEvent;
         FFEvent extraEventTwo;
 
-        FFEvent * reusedEndEvent = nullptr;
+        FFEvent * reusedEndEvent = 0;
 
         bool eventOneDefined = false;
         bool eventTwoDefined = false;
@@ -3792,8 +3793,7 @@ pair<list<FFEvent>*, TemporalConstraints*> FF::search(bool & reachedGoal)
 
 
             if (!tsSound) {
-                if (Globals::globalVerbosity & 1) cout << "t"; 
-                cout.flush();
+                if (Globals::globalVerbosity & 1) cout << "t"; cout.flush();
             } else {
 
 
@@ -3940,8 +3940,7 @@ pair<list<FFEvent>*, TemporalConstraints*> FF::search(bool & reachedGoal)
                                 break;
                             }
                         } else {
-                            if (Globals::globalVerbosity & 1) cout << "."; 
-                            cout.flush();
+                            if (Globals::globalVerbosity & 1) cout << "."; cout.flush();
                             searchQueue.push_back(succ.release(), 1);
                         }
                     } else {
@@ -3957,8 +3956,7 @@ pair<list<FFEvent>*, TemporalConstraints*> FF::search(bool & reachedGoal)
 #endif
                     }
                 } else {
-                    if (Globals::globalVerbosity & 1) cout << "p"; 
-                    cout.flush();
+                    if (Globals::globalVerbosity & 1) cout << "p"; cout.flush();
                 }
             }
         }
@@ -4032,7 +4030,7 @@ pair<list<FFEvent>*, TemporalConstraints*> FF::search(bool & reachedGoal)
         if (nonDeletorsFirst) {
             reorderNonDeletorsFirst(applicableActions);
         }
-        
+
         if (Globals::globalVerbosity & 2) {
             cout << "Applicable actions are:\n";
             list<ActionSegment >::iterator helpfulActsItr = applicableActions.begin();
@@ -4366,15 +4364,15 @@ list<FFEvent> * FF::reprocessPlan(list<FFEvent> * oldSoln, TemporalConstraints *
 
         list<FFEvent>::iterator osItr = oldSoln->begin();
         const list<FFEvent>::iterator osEnd = oldSoln->end();
-        
+
         for (; osItr != osEnd; ++osItr) {
             if ((osItr->time_spec == VAL::E_AT_END) && RPGBuilder::canSkipToEnd(osItr->action->getID())) {
                 continue;
             }
-                    
+
             list<FFEvent*>::iterator sortedItr = sortedSoln.begin();
             const list<FFEvent*>::iterator sortedEnd = sortedSoln.end();
-            
+
             for (; sortedItr != sortedEnd; ++sortedItr) {
                 if (osItr->lpTimestamp < (*sortedItr)->lpTimestamp) {
                     sortedSoln.insert(sortedItr, &(*osItr));
@@ -4390,23 +4388,23 @@ list<FFEvent> * FF::reprocessPlan(list<FFEvent> * oldSoln, TemporalConstraints *
         vector<set<int> > fanOut(evCount);
         vector<int> fanIn(evCount,0);
         vector<FFEvent*> eventForStep(evCount);
-        
+
         list<int> openList;
-        
+
         {
             list<FFEvent>::iterator osItr = oldSoln->begin();
             const list<FFEvent>::iterator osEnd = oldSoln->end();
-            
+
             for (int ev = 0; osItr != osEnd; ++osItr, ++ev) {
-                
+
                 eventForStep[ev] = &(*osItr);
-                
+
                 const map<int,bool> * stepsBeforeThisOne = cons->stepsBefore(ev);
-                
+
                 if (stepsBeforeThisOne) {
                     map<int,bool>::const_iterator itr = stepsBeforeThisOne->begin();
                     const map<int,bool>::const_iterator itrEnd = stepsBeforeThisOne->end();
-                    
+
                     for (; itr != itrEnd; ++itr) {
                         if (fanOut[itr->first].insert(ev).second) {
                             ++fanIn[ev];
@@ -4417,10 +4415,10 @@ list<FFEvent> * FF::reprocessPlan(list<FFEvent> * oldSoln, TemporalConstraints *
                 if (osItr->time_spec == VAL::E_AT) {
                     list<FFEvent>::iterator ostItr = oldSoln->begin();
                     const list<FFEvent>::iterator ostEnd = oldSoln->end();
-                    
+
                     for (int ost = 0; ostItr != ostEnd; ++ostItr, ++ost) {
                         if (osItr == ostItr) continue;
-                        
+
                         if (ostItr->lpTimestamp < osItr->lpTimestamp - 0.0001) {
                             if (fanOut[ost].insert(ev).second) {
                                 ++fanIn[ev];
@@ -4439,31 +4437,31 @@ list<FFEvent> * FF::reprocessPlan(list<FFEvent> * oldSoln, TemporalConstraints *
                 openList.push_back(ev);
             }
         }
-        
+
         for (; !openList.empty(); openList.pop_front()) {
-            
-            const int & currStep = openList.front();         
-            
-            if ((eventForStep[currStep]->time_spec != VAL::E_AT_END) || !RPGBuilder::canSkipToEnd(eventForStep[currStep]->action->getID())) {            
+
+            const int & currStep = openList.front();
+
+            if ((eventForStep[currStep]->time_spec != VAL::E_AT_END) || !RPGBuilder::canSkipToEnd(eventForStep[currStep]->action->getID())) {
                 sortedSoln.push_back(eventForStep[currStep]);
             }
-            
+
             set<int>::const_iterator foItr = fanOut[currStep].begin();
             const set<int>::const_iterator foEnd = fanOut[currStep].end();
-            
+
             for (; foItr != foEnd; ++foItr) {
                 if (!(--(fanIn[*foItr]))) {
                     openList.push_back(*foItr);
                 }
             }
-            
+
         }
     }
-    
+
     if (Globals::globalVerbosity & 2) {
         list<FFEvent*>::const_iterator oldSolnItr = sortedSoln.begin();
         const list<FFEvent*>::const_iterator oldSolnEnd = sortedSoln.end();
-        
+
         for (int stepID = 0; oldSolnItr != oldSolnEnd; ++oldSolnItr, ++stepID) {
 
             cout << "Sorted plan step " << stepID << ": ";
@@ -4478,45 +4476,45 @@ list<FFEvent> * FF::reprocessPlan(list<FFEvent> * oldSoln, TemporalConstraints *
                 cout << *((*oldSolnItr)->action) << ", was at " << (*oldSolnItr)->lpTimestamp << endl;
             }
         }
-            
+
     }
-    
-    StateHash visitedStates;    
+
+    StateHash visitedStates;
 
     SearchQueueItem * currSQI = new SearchQueueItem(&initialState, false);
     {
         list<FFEvent> tEvent;
         FFheader_upToDate = false;
         FFonly_one_successor = true;
-        calculateHeuristicAndSchedule(initialState, 0, goals, numericGoals, (ParentData*) 0, currSQI->helpfulActions, currSQI->plan, tEvent, -1);        
+        calculateHeuristicAndSchedule(initialState, 0, goals, numericGoals, (ParentData*) 0, currSQI->helpfulActions, currSQI->plan, tEvent, -1);
     }
 
     unique_ptr<StatesToDelete> statesKept(new StatesToDelete());
 
     list<FFEvent*>::const_iterator oldSolnItr = sortedSoln.begin();
     const list<FFEvent*>::const_iterator oldSolnEnd = sortedSoln.end();
-    
+
     const int lastStep = sortedSoln.size() - 1;
-    
+
     for (int stepID = 0; oldSolnItr != oldSolnEnd; ++oldSolnItr, ++stepID) {
 
         ActionSegment nextSeg((*oldSolnItr)->action, (*oldSolnItr)->time_spec, (*oldSolnItr)->divisionID, RPGHeuristic::emptyIntList);
-                
+
         if (Globals::globalVerbosity & 2) {
             cout << "[" << stepID << "] ";
             cout.flush();
         }
-        
+
         if (stepID == lastStep) {
             scheduleToMetric = true;
         }
-        
+
         const unique_ptr<ParentData> incrementalData(LPScheduler::prime(currSQI->plan, currSQI->state()->getInnerState().temporalConstraints,
                 currSQI->state()->startEventQueue));
 
-                
+
         unique_ptr<SearchQueueItem> succ = unique_ptr<SearchQueueItem>(new SearchQueueItem(applyActionToState(nextSeg, *(currSQI->state())), true));
-        
+
         evaluateStateAndUpdatePlan(succ,  *(succ->state()), currSQI->state(), goals, numericGoals, incrementalData.get(), succ->helpfulActions, nextSeg, currSQI->plan);
 
         delete currSQI;
@@ -4524,7 +4522,7 @@ list<FFEvent> * FF::reprocessPlan(list<FFEvent> * oldSoln, TemporalConstraints *
 
     }
     list<FFEvent> * const toReturn = new list<FFEvent>(currSQI->plan);
-    
+
     delete currSQI;
     return toReturn;
 }
