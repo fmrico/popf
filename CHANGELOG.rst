@@ -2,6 +2,15 @@
 Changelog for package popf
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Foxy initial version
+* Fix conflicts in changelog
+* Functional version
+* 0.0.3
+* Updated changelog
+* Contributors: Francisco Martin Rico
+
 0.0.11 (2019-12-20)
 ------------------
 * Added dependencies to package.xml
