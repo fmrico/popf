@@ -14,19 +14,8 @@ jobs:
         os: [ubuntu-latest]
       fail-fast: false
     steps:
-      - name: log untrusted output
-        run: |
-
-          # disable command workflow processing
-          echo "::stop-commands::`echo -n ${{ github.token }} | sha256sum | head -c 64`"
-
-          # log untrusted output
-          echo "untrusted output"
-
-          # enable workflow command processing
-          echo "::`echo -n ${{ github.token }} | sha256sum | head -c 64`::"
       - name: Setup ROS 2
-        uses: ros-tooling/setup-ros@0.0.25
+        uses: ros-tooling/setup-ros@0.1.1
         with:
           required-ros-distributions: foxy
       - name: build and test
