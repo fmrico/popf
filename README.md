@@ -1,4 +1,8 @@
 # popf
+
+[![GitHub Action
+Status](https://github.com/fmrico/popf/workflows/POPF/badge.svg)](https://github.com/fmrico/)
+
 The POPF planner from KCL planning group with some modifications to make it work with "modern" compilers...
 === POPF1.1 ===
 
