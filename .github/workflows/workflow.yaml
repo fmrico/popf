@@ -14,13 +14,13 @@ jobs:
         os: [ubuntu-latest]
       fail-fast: false
     steps:
-    - name: Setup ROS 2
-      uses: ros-tooling/setup-ros@0.0.25
-      with:
-        required-ros-distributions: foxy
-    - name: build and test
-      uses: ros-tooling/action-ros-ci@0.1.0
-      with:
-        package-name: popf
-        target-ros2-distro: ${{ matrix.os }}
-        vcs-repo-file-url: ""
+      - name: Setup ROS 2
+        uses: ros-tooling/setup-ros@0.0.25
+        with:
+          required-ros-distributions: foxy
+      - name: build and test
+        uses: ros-tooling/action-ros-ci@0.1.0
+        with:
+          package-name: popf
+          target-ros2-distro: ${{ matrix.os }}
+          vcs-repo-file-url: ""
