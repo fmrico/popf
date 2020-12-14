@@ -32,7 +32,7 @@
 #define ENABLE_DEBUGGING_HOOKS 1
 #endif
 
-#include "instantiation.h"
+#include <instantiation.h>
 
 using Inst::Literal;
 

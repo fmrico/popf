@@ -3,9 +3,11 @@
 $bindir = shift @ARGV;
 $srcdir = shift @ARGV;
 
-system("sed -i 's/yyerror(char/yyerror(const char/' $bindir/pddl+.cpp");
+# MacOS' sed requires '' as a parameter to -i
+system("sed -i '' 's/yyerror(char/yyerror(const char/' $bindir/pddl+.cpp");
 
-open IN, "g++ -E $srcdir/fixyywrap.cpp |";
+# add Homebrew's flex include path
+open IN, "g++ -E -I/usr/local/opt/flex/include $srcdir/fixyywrap.cpp |";
 open OUT, "> $bindir/fixyywrap.h";
 
 while (<IN>) {
@@ -23,4 +25,3 @@ open OUT, ">> $bindir/pddl+.cpp";
 print OUT '#include "fixyywrap.h"';
 print OUT "\n\n";
 close OUT;
-

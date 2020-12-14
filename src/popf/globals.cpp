@@ -35,7 +35,7 @@
 using std::ifstream;
 
 #include <ptree.h>
-#include "instantiation.h"
+#include <instantiation.h>
 using namespace Inst;
 
 namespace VAL

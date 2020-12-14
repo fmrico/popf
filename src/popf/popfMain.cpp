@@ -25,6 +25,7 @@
  *
  ************************************************************************/
 
+#include <unistd.h> //  This works  DRJ
 #include <cstdio>
 #include <iostream>
 #include <iomanip>
@@ -103,29 +104,29 @@ list<FFEvent> * readPlan(char* filename);
 string threeDP(double d)
 {
     ostringstream toReturn;
-    
+
     d *= 1000;
-    
+
     int asInt = d;
-    
+
     d -= asInt;
     if (d >= 0.5) {
         asInt += 1;
     }
-    
+
     int fractionalPart = asInt % 1000;
-    
+
     toReturn << asInt / 1000 << ".";
-       
+
     if (fractionalPart < 100) {
         toReturn << "0";
     }
     if (fractionalPart < 10) {
         toReturn << "0";
     }
-    
+
     toReturn << asInt % 1000;
-    
+
     return toReturn.str();
 }
 
@@ -148,7 +149,7 @@ int main(int argc, char * argv[])
     bool postHocTotalOrder = false;
     bool debugPreprocessing = false;
     bool postHocScheduleToMetric = false;
-    
+
     while (argcount < argc && argv[argcount][0] == '-') {
 
         string remainder(&(argv[argcount][1]));
@@ -338,18 +339,18 @@ int main(int argc, char * argv[])
         MinimalState::setTransformer(new PartialOrderTransformer());
     }
 
-    #ifdef ENABLE_DEBUGGING_HOOKS    
+    #ifdef ENABLE_DEBUGGING_HOOKS
     if (debugPreprocessing) {
         Globals::planFilename = argv[argc - 1];
     }
     #endif
-    
+
     RPGBuilder::initialise();
 
     bool reachesGoals;
-    
+
     pair<list<FFEvent>*, TemporalConstraints*> planAndConstraints;
-    
+
     list<FFEvent> * & spSoln = planAndConstraints.first;
     if (readInAPlan) {
         spSoln = readPlan(argv[argc - 1]);
@@ -362,11 +363,11 @@ int main(int argc, char * argv[])
     }
 
     if (spSoln) {
-        
+
         for (int pass = 0; pass < 2; ++pass) {
             if (pass) {
                 if (!postHocScheduleToMetric) break;
-                
+
                 if (!spSoln->empty()) {
                     if (totalOrder && !postHocTotalOrder) {
                         MinimalState::setTransformer(new PartialOrderTransformer());
@@ -381,7 +382,7 @@ int main(int argc, char * argv[])
             }
             tms refReturn;
             times(&refReturn);
-            
+
             double secs = ((double)refReturn.tms_utime + (double)refReturn.tms_stime) / ((double) sysconf(_SC_CLK_TCK));
 
             int twodp = (int)(secs * 100.0);
@@ -628,7 +629,7 @@ list<FFEvent> * readPlan(char* filename)
         if (debug) {
             cout << "TIL " << toInsert.divisionID << " goes at " << tilTS << endl;
         }
-        
+
         list<FFEvent>::iterator insItr = toReturn->begin();
         const list<FFEvent>::iterator insEnd = toReturn->end();
         for (int insAt = 0; insItr != insEnd; ++insItr, ++insAt) {
@@ -646,7 +647,7 @@ list<FFEvent> * readPlan(char* filename)
     if (debug) {
         list<FFEvent>::iterator insItr = toReturn->begin();
         const list<FFEvent>::iterator insEnd = toReturn->end();
-        
+
         for (int i = 0; insItr != insEnd; ++insItr, ++i) {
             cout << i << ": ";
             if (insItr->action) {
@@ -664,4 +665,3 @@ list<FFEvent> * readPlan(char* filename)
 
     return toReturn;
 };
-

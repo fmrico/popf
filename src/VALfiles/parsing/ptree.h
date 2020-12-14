@@ -310,7 +310,6 @@ public :
 	symbol_table() : factory(new SymbolFactory<symbol_class>()) {};
 	symbol_table(const symbol_table<VAL::var_symbol>& other) 
 		: factory(new SymbolFactory<symbol_class>(*other.factory)) {};
-
 	void setFactory(SymbolFactory<symbol_class> * sf) 
 	{
 		unique_ptr<SymbolFactory<symbol_class> > x(sf);
@@ -1734,7 +1733,6 @@ public:
 class VarTabFactory {
 public:
 	virtual ~VarTabFactory() {};
-	
 	virtual var_symbol_table * buildPredTab() {return new var_symbol_table;};
 	virtual var_symbol_table * buildFuncTab() {return new var_symbol_table;};
 	virtual var_symbol_table * buildForallTab() {return new var_symbol_table;};
