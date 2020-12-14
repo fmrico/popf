@@ -22,5 +22,5 @@ jobs:
         uses: ros-tooling/action-ros-ci@0.1.0
         with:
           package-name: popf
-          target-ros2-distro: ${{ matrix.os }}
+          target-ros2-distro: foxy
           vcs-repo-file-url: ""
