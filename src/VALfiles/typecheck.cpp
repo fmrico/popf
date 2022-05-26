@@ -793,7 +793,7 @@ bool TypeChecker::typecheckProblem()
 		if (Verbose) *report << "Type-checking goal failed\n";
 		return false;
 	}
-	if (!typecheckEffects(thea->the_problem->initial_state)) {
+	if (thea->the_problem->initial_state && !typecheckEffects(thea->the_problem->initial_state)) {
 		if (Verbose) *report << "Type-checking initial state failed\n";
 		return false;
 	}

@@ -935,7 +935,7 @@ public:
 	virtual void visit_problem(VAL::problem * p)
 	{
 		initially = true;
-		p->initial_state->visit(this);
+		if (p->initial_state) p->initial_state->visit(this);
 		initially = false;
 		finally = true;
 		if(p->the_goal) p->the_goal->visit(this);

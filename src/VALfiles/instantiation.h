@@ -76,7 +76,7 @@ private:
 	
 	struct indexLT { 
 
-		bool operator() (const index & a, const index & b) {
+		bool operator() (const index & a, const index & b) const {
 			VAL::pred_symbol * afirst = VAL::current_analysis->pred_tab.symbol_get(a.first->getName());
 			VAL::pred_symbol * bfirst = VAL::current_analysis->pred_tab.symbol_get(b.first->getName());
 			if (afirst < bfirst) return true;

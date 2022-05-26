@@ -43,7 +43,12 @@ void InitialStateEvaluator::setInitialState()
 {
 	initState.clear();
 	init0State.clear();
-	
+
+	if (!current_analysis->the_problem->initial_state) {
+		return;
+	}
+
+
 	for(pc_list<simple_effect*>::const_iterator i = 
 				current_analysis->the_problem->initial_state->add_effects.begin();
 				i != current_analysis->the_problem->initial_state->add_effects.end();++i)

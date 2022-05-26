@@ -322,13 +322,13 @@ public:
 
 
     virtual void visit_problem(VAL::problem * p) {
-
+        
         WhereAreWeNow = PARSE_GOAL;
         inpres = false;
 
         numToUse = numericGoals;
         litToUse = literalGoals;
-        p->the_goal->visit(this);
+        if(p->the_goal) p->the_goal->visit(this);
         WhereAreWeNow = PARSE_UNKNOWN;
         if (p->constraints) {
             WhereAreWeNow = PARSE_CONSTRAINTS;
@@ -1867,7 +1867,7 @@ public:
     virtual void visit_problem(VAL::problem * p) {
         TimedPrecEffCollector::toBlame = 0;
         WhereAreWeNow = PARSE_INITIAL;
-        p->initial_state->visit(this);
+        if (p->initial_state) p->initial_state->visit(this);
         WhereAreWeNow = PARSE_UNKNOWN;
         //inpres = false;
         //p->the_goal->visit(this);

@@ -1274,7 +1274,7 @@ public:
 	};
 	virtual void visit_problem(problem * p) 
 	{
-		p->initial_state->visit(this);
+		if( p->initial_state) p->initial_state->visit(this);
 		if(p->the_goal) p->the_goal->visit(this);
         if(p->constraints) p->constraints->visit(this);
 	};
@@ -1504,7 +1504,7 @@ public:
 	virtual void visit_problem(problem * p) 
 	{
 		initially = true;
-		p->initial_state->visit(this);
+		if (p->initial_state) p->initial_state->visit(this);
 		initially = false;
 		finally = true;
 		if(p->the_goal) p->the_goal->visit(this);

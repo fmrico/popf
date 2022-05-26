@@ -792,7 +792,7 @@ public:
 /** Lexicographic comparison of <code>const_symbol</code>s, based on their names */
 struct ConstSymbolLT {
 
-    bool operator()(const VAL::const_symbol* const a, const VAL::const_symbol* const b) {
+    bool operator()(const VAL::const_symbol* const a, const VAL::const_symbol* const b) const {
         return (a->getName() < b->getName());
     }
 };
@@ -2163,9 +2163,9 @@ public:
         visit_operator_(p);
     };
     virtual void visit_problem(VAL::problem * p) {
-        p->initial_state->visit(this);
+        if (p->initial_state) p->initial_state->visit(this);
         inpres = false;
-        p->the_goal->visit(this);
+        if (p->the_goal) p->the_goal->visit(this);
         if (p->constraints) p->constraints->visit(this);
     };
 
