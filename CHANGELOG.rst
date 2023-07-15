@@ -2,6 +2,9 @@
 Changelog for package popf
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 0.0.14 (2022-05-27)
 -------------------
 * Checking null problem components
