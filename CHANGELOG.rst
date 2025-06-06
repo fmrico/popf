@@ -7,6 +7,11 @@ Changelog for package popf
 
 Forthcoming
 -----------
+* Update Changelog
+* 0.0.17
+* Update Changelog
+* Contributors: Francisco Martín Rico
+
 * 0.0.17
 * Update Changelog
 * Contributors: Francisco Martín Rico
