@@ -16,6 +16,19 @@ find_package(CoinUtils)
 find_package(Cbc)
 find_package(Cgl)
 
+# Some distros/modules don't populate OSI-related variables (e.g. OSICLP_LIBRARIES)
+# but popf's CLP solver needs them when enforcing strict shared-library linking.
+find_library(OSICLP_LIBRARY NAMES OsiClp)
+find_library(OSI_LIBRARY NAMES Osi)
+find_library(OSICBC_LIBRARY NAMES OsiCbc)
+
+if(NOT OSICLP_LIBRARIES AND OSICLP_LIBRARY)
+  set(OSICLP_LIBRARIES ${OSICLP_LIBRARY})
+endif()
+if(NOT OSI_LIBRARIES AND OSI_LIBRARY)
+  set(OSI_LIBRARIES ${OSI_LIBRARY})
+endif()
+
 set(val_SOURCE_DIR src/VALfiles)
 set(popf_SOURCE_DIR src/popf)
 set(parsePDDL_SOURCE_DIR ${val_SOURCE_DIR}/parsing)
@@ -34,6 +47,7 @@ include_directories(
 ## ParsePDDL
 
 find_program(BISON_EXECUTABLE bison)
+find_package(FLEX REQUIRED)
 
 if(NOT EXISTS ${BISON_EXECUTABLE})
 	message("Could not find bison executable.")
@@ -75,8 +89,11 @@ set(libParsePDDL_SRCS
       ${parsePDDL_SOURCE_DIR}/DebugWriteController.cpp
 )
 
-add_library(ParsePDDL SHARED ${libParsePDDL_SRCS})
+add_library(VALGlobals SHARED ${val_SOURCE_DIR}/VALGlobals.cpp)
 
+add_library(ParsePDDL SHARED ${libParsePDDL_SRCS})
+target_link_libraries(ParsePDDL PRIVATE VALGlobals ${FLEX_LIBRARIES})
+set_target_properties(ParsePDDL PROPERTIES LINK_FLAGS "-Wl,--no-undefined -Wl,-z,defs")
 ## Val
 
 set(libInst_SRCS
@@ -93,6 +110,7 @@ set(libInst_SRCS
 
 add_library(Inst SHARED ${libInst_SRCS})
 target_link_libraries(Inst ParsePDDL)
+set_target_properties(Inst PROPERTIES LINK_FLAGS "-Wl,--no-undefined -Wl,-z,defs")
 
 set(validate_SRCS
      ${val_SOURCE_DIR}/Action.cpp 
@@ -119,6 +137,7 @@ add_executable(validate ${validate_SRCS})
 
 target_link_libraries(validate
   ParsePDDL
+  VALGlobals
 )
 
 set(parser_SRCS
@@ -129,9 +148,10 @@ add_executable(parser ${parser_SRCS})
 
 target_link_libraries(parser
         ParsePDDL
+  VALGlobals
 )
 
-install(TARGETS validate parser ParsePDDL
+install(TARGETS validate parser ParsePDDL VALGlobals
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION lib/${PROJECT_NAME}
@@ -158,7 +178,13 @@ set(popf_build_srcs
     ${popf_SOURCE_DIR}/Popf.cpp)
 
 add_library(popfCommon SHARED ${popf_build_srcs})
-target_link_libraries(popfCommon ParsePDDL Inst)
+target_link_libraries(popfCommon
+  ParsePDDL
+  Inst
+  ${CBC_LIBRARY} ${CGL_LIBRARIES} ${CLP_LIBRARIES} ${COINUTILS_LIBRARIES}
+  ${OSICLP_LIBRARIES} ${OSI_LIBRARIES} ${OSICBC_LIBRARY}
+)
+set_target_properties(popfCommon PROPERTIES LINK_FLAGS "-Wl,--no-undefined -Wl,-z,defs")
 
 install(TARGETS popfCommon ParsePDDL Inst
   ARCHIVE DESTINATION lib
@@ -182,6 +208,6 @@ install(FILES src/popf/Popf.hpp
 )
 
 ament_export_include_directories(include)
-ament_export_libraries(popfCommon ParsePDDL Inst ${CBC_LIBRARY} ${CGL_LIBRARIES} ${OSICLP_LIBRARIES} ${OSI_LIBRARIES} ${CLP_LIBRARIES}  ${COINUTILS_LIBRARIES})
+ament_export_libraries(popfCommon ParsePDDL VALGlobals Inst ${CBC_LIBRARY} ${CGL_LIBRARIES} ${OSICLP_LIBRARIES} ${OSI_LIBRARIES} ${CLP_LIBRARIES}  ${COINUTILS_LIBRARIES})
 ament_export_dependencies(${dependencies})
 ament_package()
