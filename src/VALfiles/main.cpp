@@ -74,13 +74,11 @@ extern int yyparse();
 extern int yydebug;
 
 namespace VAL {
-  
-parse_category* top_thing = NULL;
 
+extern parse_category* top_thing;
 analysis an_analysis;
-analysis* current_analysis;
-
-yyFlexLexer* yfl;
+extern analysis* current_analysis;
+extern yyFlexLexer* yfl;
 bool Silent;
 int errorCount;
 bool Verbose;
@@ -94,7 +92,7 @@ ostream * report = &cout;
 bool makespanDefault;
 };
 
-char * current_filename;
+extern char * current_filename;
 
 typedef map<double,vector<string> > Ranking;
 

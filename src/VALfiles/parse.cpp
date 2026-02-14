@@ -52,16 +52,14 @@ using std::ofstream;
 
 namespace VAL {
 
-parse_category* top_thing=NULL;
-
+extern parse_category* top_thing;
 analysis an_analysis;
-analysis* current_analysis;
-
-yyFlexLexer* yfl;
+extern analysis* current_analysis;
+extern yyFlexLexer* yfl;
 
 };
 
-char * current_filename;
+extern char * current_filename;
 
 using namespace VAL;
 
