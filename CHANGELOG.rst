@@ -2,6 +2,23 @@
 Changelog for package popf
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.0.17 (2025-06-06)
+-------------------
+
+0.0.19 (2025-06-22)
+-------------------
+
+0.0.18 (2025-06-06)
+-------------------
+* Update Changelog
+* 0.0.17
+* Update Changelog
+* Contributors: Francisco Martín Rico
+
+* 0.0.17
+* Update Changelog
+* Contributors: Francisco Martín Rico
+
 0.0.16 (2023-11-19)
 -------------------
 
