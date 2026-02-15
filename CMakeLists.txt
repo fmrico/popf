@@ -90,7 +90,7 @@ set(libParsePDDL_SRCS
 add_library(VALGlobals SHARED ${val_SOURCE_DIR}/VALGlobals.cpp)
 
 add_library(ParsePDDL SHARED ${libParsePDDL_SRCS})
-target_link_libraries(ParsePDDL PRIVATE VALGlobals)
+target_link_libraries(ParsePDDL PRIVATE VALGlobals ${FLEX_LIBRARIES})
 set_target_properties(ParsePDDL PROPERTIES LINK_FLAGS "-Wl,--no-undefined -Wl,-z,defs")
 ## Val
 
