@@ -1,7 +1,6 @@
 # popf
 
-[![GitHub Action
-Status](https://github.com/fmrico/popf/workflows/rolling/badge.svg)](https://github.com/fmrico/popf)
+[![rolling](https://github.com/fmrico/popf/actions/workflows/rolling.yaml/badge.svg)](https://github.com/fmrico/popf/actions/workflows/rolling.yaml)
 
 [![GitHub Action
 Status](https://github.com/fmrico/popf/workflows/kilted/badge.svg)](https://github.com/fmrico/popf)
