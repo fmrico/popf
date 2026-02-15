@@ -1,7 +1,16 @@
 # popf
 
+[![rolling](https://github.com/fmrico/popf/actions/workflows/rolling.yaml/badge.svg)](https://github.com/fmrico/popf/actions/workflows/rolling.yaml)
+
 [![GitHub Action
-Status](https://github.com/fmrico/popf/workflows/POPF/badge.svg)](https://github.com/fmrico/)
+Status](https://github.com/fmrico/popf/workflows/kilted/badge.svg)](https://github.com/fmrico/popf)
+
+[![GitHub Action
+Status](https://github.com/fmrico/popf/workflows/jazzy/badge.svg)](https://github.com/fmrico/popf)
+
+[![GitHub Action
+Status](https://github.com/fmrico/popf/workflows/humble/badge.svg)](https://github.com/fmrico/popf)
+
 
 The POPF planner from KCL planning group with some modifications to make it work with "modern" compilers...
 === POPF1.1 ===
