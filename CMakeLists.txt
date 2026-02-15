@@ -79,8 +79,6 @@ add_custom_command(
         ${CMAKE_CURRENT_SOURCE_DIR}/${parsePDDL_SOURCE_DIR}/pddl+.yacc -o ${CMAKE_CURRENT_BINARY_DIR}/pddl+.cpp
        DEPENDS
         ${CMAKE_CURRENT_SOURCE_DIR}/${parsePDDL_SOURCE_DIR}/pddl+.yacc ${CMAKE_CURRENT_BINARY_DIR}/lex.yy.cc
-       COMMAND
-        ${CMAKE_CURRENT_SOURCE_DIR}/${parsePDDL_SOURCE_DIR}/fixyywrap ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/${parsePDDL_SOURCE_DIR}/
 )
 
 set(libParsePDDL_SRCS
