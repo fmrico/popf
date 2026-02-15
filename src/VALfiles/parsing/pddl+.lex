@@ -8,10 +8,10 @@
   using std::cerr;
   using std::istream;
   using namespace VAL;
-extern "C" int yywrap();
 
 %}
 %option case-insensitive
+%option noyywrap
 
 char [a-zA-Z_]
 digit [0-9]
@@ -158,9 +158,4 @@ at_time "at"{whitespace}{float}
 %%
 
 
-extern "C" {
-int yywrap()
-{
-	return 1;
-};
-};
+
