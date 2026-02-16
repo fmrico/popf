@@ -2,8 +2,10 @@
 Changelog for package popf
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-0.0.17 (2025-06-06)
--------------------
+Forthcoming
+-----------
+* Fix link problem
+* Contributors: Francisco Martín Rico
 
 0.0.19 (2025-06-22)
 -------------------
@@ -15,7 +17,8 @@ Changelog for package popf
 * Update Changelog
 * Contributors: Francisco Martín Rico
 
-* 0.0.17
+0.0.17 (2025-06-06)
+-------------------
 * Update Changelog
 * Contributors: Francisco Martín Rico
 
