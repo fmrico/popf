@@ -82,4 +82,3 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 For details of the license, see the file LICENCE in this directory.
-
