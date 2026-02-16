@@ -2,6 +2,11 @@
 Changelog for package popf
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Fix link problem
+* Contributors: Francisco Martín Rico
+
 0.0.17 (2024-10-12)
 -------------------
 
