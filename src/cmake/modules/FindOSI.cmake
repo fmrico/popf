@@ -9,6 +9,7 @@ endif (OSI_INCLUDES AND OSI_LIBRARIES)
 find_path(OSI_INCLUDES
   NAMES
   coin/config_osi.h
+  coin/OsiConfig.h
   PATHS
   ${OSIDIR}/include
   ${INCLUDE_INSTALL_DIR}
