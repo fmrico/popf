@@ -20,7 +20,7 @@ jobs:
         with:
           ref: rolling-devel
       - name: Setup ROS 2
-        uses: ros-tooling/setup-ros@0.7.15
+        uses: ros-tooling/setup-ros@0.7.19
         with:
           required-ros-distributions: rolling
       - name: build and test
