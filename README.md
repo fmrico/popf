@@ -2,14 +2,17 @@
 
 [![rolling](https://github.com/fmrico/popf/actions/workflows/rolling.yaml/badge.svg)](https://github.com/fmrico/popf/actions/workflows/rolling.yaml)
 
-[![GitHub Action
-Status](https://github.com/fmrico/popf/workflows/kilted/badge.svg)](https://github.com/fmrico/popf)
+[![rolling](https://github.com/fmrico/popf/actions/workflows/lyrical.yaml/badge.svg)](https://github.com/fmrico/popf/actions/workflows/lyrical.yaml)
+
 
 [![GitHub Action
-Status](https://github.com/fmrico/popf/workflows/jazzy/badge.svg)](https://github.com/fmrico/popf)
+Status](https://github.com/fmrico/popf/workflows/kilted/badge.svg)](https://github.com/fmrico/popf/actions/workflows/kilted.yaml)
 
 [![GitHub Action
-Status](https://github.com/fmrico/popf/workflows/humble/badge.svg)](https://github.com/fmrico/popf)
+Status](https://github.com/fmrico/popf/workflows/jazzy/badge.svg)](https://github.com/fmrico/popf/actions/workflows/jazzy.yaml)
+
+[![GitHub Action
+Status](https://github.com/fmrico/popf/workflows/humble/badge.svg)](https://github.com/fmrico/popf/actions/workflows/humble.yaml)
 
 
 The POPF planner from KCL planning group with some modifications to make it work with "modern" compilers...
