@@ -1300,14 +1300,18 @@ void FF::evaluateStateAndUpdatePlan(unique_ptr<SearchQueueItem> & succ, Extended
 
     if (actID.second == VAL::E_AT_START) {
         if (rawDebug) cout << "RAW start\n";
-        extraEvent = FFEvent(actID.first, state.startEventQueue.back().minDuration, state.startEventQueue.back().maxDuration);
+        const bool nonTemporal = RPGBuilder::getRPGDEs(actID.first->getID()).empty();
+        extraEvent = FFEvent(
+            actID.first,
+            nonTemporal ? 0.0 : state.startEventQueue.back().minDuration,
+            nonTemporal ? 0.0 : state.startEventQueue.back().maxDuration);
         eventOneDefined = true;
 
         assert(extraEvent.time_spec == VAL::E_AT_START);
         //makeJustApplied(actualJustApplied, tilFrom, state, true);
         //if (!actualJustApplied.empty()) justApplied = &actualJustApplied;
 
-        if (!RPGBuilder::getRPGDEs(actID.first->getID()).empty()) { // if it's not a non-temporal action
+        if (!nonTemporal) { // if it's not a non-temporal action
 
             const int endStepID = state.getInnerState().planLength - 1;
             const int startStepID = endStepID - 1;
