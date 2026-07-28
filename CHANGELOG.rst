@@ -5,6 +5,11 @@ Changelog for package popf
 0.0.17 (2025-06-06)
 -------------------
 
+Forthcoming
+-----------
+* Fixes a bug that appears now with newer C++ versions
+* Contributors: Francisco Martín Rico
+
 0.0.19 (2025-06-22)
 -------------------
 
