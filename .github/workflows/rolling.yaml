@@ -10,19 +10,13 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-26.04]
-      fail-fast: false
+    runs-on: ubuntu-26.04
+    container:
+      image: ghcr.io/ros-tooling/setup-ros-docker/setup-ros-docker-ubuntu-resolute-ros-rolling-ros-base:master
     steps:
       - uses: actions/checkout@v6
         with:
           ref: rolling-devel
-      - name: Setup ROS 2
-        uses: ros-tooling/setup-ros@0.7.19
-        with:
-          required-ros-distributions: rolling
       - name: build and test
         uses: ros-tooling/action-ros-ci@0.4.8
         with:
