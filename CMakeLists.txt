@@ -15,6 +15,7 @@ find_package(Clp)
 find_package(CoinUtils)
 find_package(Cbc)
 find_package(Cgl)
+find_package(OSI)
 
 # Some distros/modules don't populate OSI-related variables (e.g. OSICLP_LIBRARIES)
 # but popf's CLP solver needs them when enforcing strict shared-library linking.
@@ -42,6 +43,9 @@ include_directories(
   ${CBC_INCLUDES}/coin  
   ${CPLEX_INCLUDES} 
   ${CONCERT_INCLUDES}
+  ${OSI_INCLUDES}/coin
+  ${COINUTILS_INCLUDES}/coin
+  ${CGL_INCLUDES}/coin
 )
 
 ## ParsePDDL
