@@ -11,10 +11,6 @@ Status](https://github.com/fmrico/popf/workflows/kilted/badge.svg)](https://gith
 [![GitHub Action
 Status](https://github.com/fmrico/popf/workflows/jazzy/badge.svg)](https://github.com/fmrico/popf/actions/workflows/jazzy.yaml)
 
-[![GitHub Action
-Status](https://github.com/fmrico/popf/workflows/humble/badge.svg)](https://github.com/fmrico/popf/actions/workflows/humble.yaml)
-
-
 The POPF planner from KCL planning group with some modifications to make it work with "modern" compilers...
 === POPF1.1 ===
 
