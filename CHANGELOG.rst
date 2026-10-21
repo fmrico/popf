@@ -2,6 +2,50 @@
 Changelog for package popf
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.0.1 (2026-10-21)
+------------------
+* One version for Humble, Jazzy, Kilted and Lyrical
+* Smoke tests: popf plans a small domain and fails on an unsolvable problem
+* CMake: add missing include directories (`#12 <https://github.com/fmrico/popf/pull/12>`_)
+* Contributors: Francisco Martín Rico, Guilhem Saurel
+
+1.0.0 (2026-02-16)
+------------------
+* Fix link problem
+* Contributors: Francisco Martín Rico
+
+0.1.0 (2026-02-16)
+------------------
+* Fix link problem
+* Contributors: Francisco Martín Rico
+
+0.0.20 (2026-07-28)
+-------------------
+* Fixes a bug that appears now with newer C++ versions
+* Contributors: Francisco Martín Rico
+
+0.0.19 (2025-06-22)
+-------------------
+
+0.0.18 (2025-06-06)
+-------------------
+* Update Changelog
+* 0.0.17
+* Update Changelog
+* Contributors: Francisco Martín Rico
+
+0.0.17 (2024-10-12)
+-------------------
+* 0.0.17
+* Update Changelog
+* Contributors: Francisco Martín Rico
+
+0.0.16 (2023-11-19)
+-------------------
+
+0.0.15 (2023-07-15)
+-------------------
+
 0.0.14 (2022-05-27)
 -------------------
 * Checking null problem components

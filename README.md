@@ -2,15 +2,14 @@
 
 [![rolling](https://github.com/fmrico/popf/actions/workflows/rolling.yaml/badge.svg)](https://github.com/fmrico/popf/actions/workflows/rolling.yaml)
 
-[![GitHub Action
-Status](https://github.com/fmrico/popf/workflows/kilted/badge.svg)](https://github.com/fmrico/popf)
+[![rolling](https://github.com/fmrico/popf/actions/workflows/lyrical.yaml/badge.svg)](https://github.com/fmrico/popf/actions/workflows/lyrical.yaml)
+
 
 [![GitHub Action
-Status](https://github.com/fmrico/popf/workflows/jazzy/badge.svg)](https://github.com/fmrico/popf)
+Status](https://github.com/fmrico/popf/workflows/kilted/badge.svg)](https://github.com/fmrico/popf/actions/workflows/kilted.yaml)
 
 [![GitHub Action
-Status](https://github.com/fmrico/popf/workflows/humble/badge.svg)](https://github.com/fmrico/popf)
-
+Status](https://github.com/fmrico/popf/workflows/jazzy/badge.svg)](https://github.com/fmrico/popf/actions/workflows/jazzy.yaml)
 
 The POPF planner from KCL planning group with some modifications to make it work with "modern" compilers...
 === POPF1.1 ===
@@ -82,3 +81,4 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 For details of the license, see the file LICENCE in this directory.
+
