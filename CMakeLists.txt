@@ -1,6 +1,17 @@
 cmake_minimum_required(VERSION 3.5)
 project (popf) 
 
+# VAL uses std features removed in C++17 (binary_function, auto_ptr...)
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# -z defs is not supported by the Apple linker
+if(APPLE)
+  set(POPF_LINK_FLAGS "")
+else()
+  set(POPF_LINK_FLAGS "-Wl,--no-undefined -Wl,-z,defs")
+endif()
+
 find_package(ament_cmake REQUIRED)
 set(dependencies
     rclcpp
@@ -95,7 +106,7 @@ add_library(VALGlobals SHARED ${val_SOURCE_DIR}/VALGlobals.cpp)
 
 add_library(ParsePDDL SHARED ${libParsePDDL_SRCS})
 target_link_libraries(ParsePDDL PRIVATE VALGlobals ${FLEX_LIBRARIES})
-set_target_properties(ParsePDDL PROPERTIES LINK_FLAGS "-Wl,--no-undefined -Wl,-z,defs")
+set_target_properties(ParsePDDL PROPERTIES LINK_FLAGS "${POPF_LINK_FLAGS}")
 ## Val
 
 set(libInst_SRCS
@@ -112,7 +123,7 @@ set(libInst_SRCS
 
 add_library(Inst SHARED ${libInst_SRCS})
 target_link_libraries(Inst ParsePDDL)
-set_target_properties(Inst PROPERTIES LINK_FLAGS "-Wl,--no-undefined -Wl,-z,defs")
+set_target_properties(Inst PROPERTIES LINK_FLAGS "${POPF_LINK_FLAGS}")
 
 set(validate_SRCS
      ${val_SOURCE_DIR}/Action.cpp 
@@ -186,7 +197,7 @@ target_link_libraries(popfCommon
   ${CBC_LIBRARY} ${CGL_LIBRARIES} ${CLP_LIBRARIES} ${COINUTILS_LIBRARIES}
   ${OSICLP_LIBRARIES} ${OSI_LIBRARIES} ${OSICBC_LIBRARY}
 )
-set_target_properties(popfCommon PROPERTIES LINK_FLAGS "-Wl,--no-undefined -Wl,-z,defs")
+set_target_properties(popfCommon PROPERTIES LINK_FLAGS "${POPF_LINK_FLAGS}")
 
 install(TARGETS popfCommon ParsePDDL Inst
   ARCHIVE DESTINATION lib

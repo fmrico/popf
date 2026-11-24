@@ -1552,9 +1552,11 @@ set<PropertySpace *> TIMAnalyser::relevant(pddl_type * tp)
 
 namespace std
 {
+#if !defined(_LIBCPP_VERSION)
   template<>
   struct iterator_traits<TIM::getConditionally<std::_Rb_tree_const_iterator<TIM::Property*> > >
   {
     typedef TIM::Property value_type;
   };
+#endif
 }
