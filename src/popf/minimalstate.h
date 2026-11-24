@@ -36,7 +36,6 @@
 #include <cassert>
 
 #include <float.h>  // Needed for DBL_MAX
-#include <values.h>
 
 using std::set;
 using std::map;
