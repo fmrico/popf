@@ -33,6 +33,7 @@
 #include <set>
 #include <map>
 #include <limits>
+#include <climits>
 
 using std::vector;
 using std::list;
@@ -46,7 +47,6 @@ using std::map;
 #include "ptree.h"
 
 #include <assert.h>
-#include <values.h>
 #include <math.h>
 
 using namespace Inst;
