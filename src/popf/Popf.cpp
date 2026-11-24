@@ -38,6 +38,7 @@
 #include <vector>
 #include "ptree.h"
 #include <assert.h>
+#include <unistd.h>
 #include <FlexLexer.h>
 #include "instantiation.h"
 #include "SimpleEval.h"
